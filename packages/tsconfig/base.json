@@ -19,7 +19,8 @@
     "strictNullChecks": true,
     "downlevelIteration": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "baseUrl": "."
   },
   "exclude": ["node_modules"]
 }
