@@ -17,8 +17,8 @@ export const Piece = {
     create: (
         ownerId: string,
         size: PieceSize,
-        used: boolean = false,
         id: string = nanoid(),
+        used: boolean = false,
     ): Piece => ({
         id,
         ownerId,

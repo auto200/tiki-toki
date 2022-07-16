@@ -15,7 +15,7 @@ export const Cell = {
     ): Cell => ({ id, pieces, dominantPiece }),
     /** For now we assume that players cannot place pieces in a cell that they
      * dominate */
-    canPlace: (cell: Cell, piece: Piece): boolean =>
+    canPlacePiece: (cell: Cell, piece: Piece): boolean =>
         cell.dominantPiece?.ownerId !== piece.ownerId &&
         cell.pieces.every(cellPiece => cellPiece.size < piece.size),
     placePiece: (cell: Cell, piece: Piece): Cell => ({

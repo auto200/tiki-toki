@@ -11,10 +11,10 @@ export const Board = {
     create: (cells: Cell[] = times(GRID_SIZE * GRID_SIZE, () => Cell.create())): Board => ({
         cells,
     }),
-    placePiece: (board: Board, cell: Cell, piece: Piece): Board => ({
+    placePiece: (board: Board, targetCell: Cell, piece: Piece): Board => ({
         ...board,
         cells: board.cells.map(boardCell =>
-            boardCell.id === cell.id ? Cell.placePiece(cell, piece) : cell,
+            boardCell.id === targetCell.id ? Cell.placePiece(targetCell, piece) : boardCell,
         ),
     }),
 };
