@@ -1,10 +1,10 @@
-import { nanoid } from "nanoid";
-import { Board } from "../Board";
-import { Player } from "../Player";
 import sample from "lodash/sample";
-import { Piece } from "../Piece";
+import { nanoid } from "nanoid";
+import { WINNING_CONDITIONS } from "../../constants";
+import { Board } from "../Board";
 import { Cell } from "../Cell";
-import { WINNING_CONDITIONS } from "@constants";
+import { Piece } from "../Piece";
+import { Player } from "../Player";
 
 export type Game = {
     id: string;
@@ -27,14 +27,14 @@ export const Game = {
     create: (
         players: Players,
         board: Board = Board.create(),
-        initialPlayerTurn: PlayerKey = Game.getInitialPlayerTurn(players),
+        initialPlayerTurn?: PlayerKey,
         id: string = nanoid(),
     ): Game => ({
         id,
         board,
         isDraw: false,
         players,
-        playerTurn: initialPlayerTurn,
+        playerTurn: initialPlayerTurn || Game.getInitialPlayerTurn(players),
         winnerId: null,
         winningCellsIds: null,
     }),

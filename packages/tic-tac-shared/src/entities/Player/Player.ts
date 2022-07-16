@@ -8,14 +8,10 @@ export type Player = {
 };
 
 export const Player = {
-    create: (
-        gameId: string,
-        id: string = nanoid(),
-        pieces: Player["pieces"] = Player.initPlayerPieces(id),
-    ): Player => ({
+    create: (gameId: string, id: string = nanoid(), pieces?: Player["pieces"]): Player => ({
         id,
         gameId,
-        pieces,
+        pieces: pieces || Player.initPlayerPieces(id),
     }),
     isPieceOwner: (player: Player, piece: Piece): boolean =>
         player.pieces.some(playerPiece => playerPiece.ownerId === piece.id),

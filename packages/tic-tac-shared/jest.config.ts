@@ -1,9 +1,8 @@
 import type { Config } from "@jest/types";
 // Sync object
 const config: Config.InitialOptions = {
-  verbose: true,
-  transform: {
-    "^.+\\.ts?$": "ts-jest",
-  },
+    preset: "ts-jest",
+    testPathIgnorePatterns: ["<rootDir>/dist/"],
+    transformIgnorePatterns: ["node_modules"],
 };
 export default config;

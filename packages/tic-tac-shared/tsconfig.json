@@ -3,11 +3,10 @@
   "compilerOptions": {
     "strictFunctionTypes": true,
     "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "@constants": ["src/constants"]
-    }
+    "target": "ES2019",
+    "module": "commonjs",
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*test.ts"]
+  "include": [
+    "src/**/*.ts"
+  ],
 }

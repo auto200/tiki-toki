@@ -1,6 +1,6 @@
-import { GRID_SIZE } from "@constants";
-import { Cell } from "../Cell";
 import times from "lodash/times";
+import { GRID_SIZE } from "../../constants";
+import { Cell } from "../Cell";
 import { Piece } from "../Piece";
 
 export type Board = {
