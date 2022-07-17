@@ -6,16 +6,16 @@ import { Piece } from "../Piece";
 import { Player } from "../Player";
 import { PlayerKey, Players } from "../Players";
 
+export type GameState =
+    | { state: "PLAYING" }
+    | { state: "DRAW" }
+    | { state: "ENDED"; winnerId: string; winningCellsIds: string[] };
 export type Game = {
     id: string;
     board: Board;
     players: Players;
     playerTurn: PlayerKey;
-    /**playerId*/
-    winnerId: null | string;
-    isDraw: boolean;
-    /**game result*/
-    winningCellsIds: null | string[];
+    state: GameState;
 };
 
 export const Game = {
@@ -26,22 +26,20 @@ export const Game = {
         id: string = nanoid(),
     ): Game => ({
         id,
+        state: { state: "PLAYING" },
         board,
-        isDraw: false,
         players,
         playerTurn: initialPlayerTurn || Players.getInitialPlayerTurn(players),
-        winnerId: null,
-        winningCellsIds: null,
     }),
 
-    makeMove: (game: Game, player: Player, piece: Piece, target: Cell): Game | null => {
-        const isGameFinished = !!game.winnerId;
+    makeMove: (game: Game, player: Player, piece: Piece, target: Cell): Game => {
+        const isGameFinished = game.state.state === "ENDED";
         const isPlayerInGame = Game.isPlayerInTheGame(game, player);
         const isPlayersTurn = game.players[game.playerTurn].id === player.id;
         const isPlayerPieceOwner = Player.isPieceOwner(player, piece);
         const canPlace = Cell.canPlacePiece(target, piece);
         if (isGameFinished || !isPlayerInGame || !isPlayersTurn || !isPlayerPieceOwner || !canPlace)
-            return null;
+            throw new Error("Illegal move");
 
         return Game.evaluateGameState({
             ...game,
@@ -67,20 +65,21 @@ export const Game = {
             if (cellAOwner === cellBOwner && cellBOwner === cellCOwner) {
                 return {
                     ...game,
-                    winnerId: cellAOwner,
-                    winningCellsIds: [cellA.id, cellB.id, cellC.id],
+                    state: {
+                        state: "ENDED",
+                        winnerId: cellAOwner,
+                        winningCellsIds: [cellA.id, cellB.id, cellC.id],
+                    },
                 };
             }
         }
         //check for draw
         const nextTurnPlayerKey = Game.getNextTurnPlayerKey(game);
-        // const nextTurnPlayer = game.players[nextTurnPlayerKey];
-        // const isDraw = !nextTurnPlayer.pieces.some(piece =>
-        //     game.board.cells.some(cell => Cell.canPlacePiece(cell, piece)),
-        // );
-        // if (isDraw) {
-        //     return { ...game, isDraw };
-        // }
+        const nextTurnPlayer = game.players[nextTurnPlayerKey];
+        const isDraw = !Player.canMakeAnyMove(nextTurnPlayer, game.board);
+        if (isDraw) {
+            return { ...game, state: { state: "DRAW" } };
+        }
         //toggle turn
         return { ...game, playerTurn: nextTurnPlayerKey };
     },

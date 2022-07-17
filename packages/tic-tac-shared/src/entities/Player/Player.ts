@@ -1,4 +1,6 @@
 import { nanoid } from "nanoid";
+import { Board } from "../Board";
+import { Cell } from "../Cell";
 import { Piece, PieceSize } from "../Piece";
 
 export type Player = {
@@ -27,4 +29,8 @@ export const Player = {
             playerPiece.id === piece.id ? { ...playerPiece, used: true } : playerPiece,
         ),
     }),
+    canMakeAnyMove: (player: Player, board: Board): boolean =>
+        player.pieces.some(
+            piece => !piece.used && board.cells.some(cell => Cell.canPlacePiece(cell, piece)),
+        ),
 };

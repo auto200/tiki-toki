@@ -3,7 +3,7 @@ import { Cell } from "../Cell";
 import { Piece, PieceSize } from "../Piece";
 import { Player } from "../Player";
 import { PlayerKey, Players } from "../Players";
-import { Game } from "./Game";
+import { Game, GameState } from "./Game";
 
 const createPlayerPieces = (playerId: string): Piece[] => [
     Piece.create(playerId, PieceSize.small, `piece-${playerId}-0`),
@@ -41,6 +41,7 @@ describe("Game", () => {
 
         const expected: Game = {
             id: GAME_ID,
+            state: { state: "PLAYING" },
             board: {
                 cells: [
                     { id: "cell-0", dominantPiece: null, pieces: [] },
@@ -138,10 +139,7 @@ describe("Game", () => {
                     ],
                 },
             },
-            isDraw: false,
             playerTurn: INITIAL_PLAYER_TURN,
-            winnerId: null,
-            winningCellsIds: null,
         };
 
         expect(game).toEqual(expected);
@@ -219,7 +217,11 @@ describe("Game", () => {
             players.one.pieces[3]!,
             game_turn_3!.board.cells[6]!,
         );
-        expect(game_turn_4?.winnerId).toBe(PLAYER_ONE_ID);
-        expect(game_turn_4?.winningCellsIds).toEqual(["cell-0", "cell-3", "cell-6"]);
+        const expectedGameState: GameState = {
+            state: "ENDED",
+            winnerId: PLAYER_ONE_ID,
+            winningCellsIds: ["cell-0", "cell-3", "cell-6"],
+        };
+        expect(game_turn_4?.state).toEqual(expectedGameState);
     });
 });
