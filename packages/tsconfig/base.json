@@ -5,22 +5,20 @@
     "allowJs": false,
     "composite": false,
     "declaration": true,
-    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "inlineSources": false,
-    "isolatedModules": true,
     "moduleResolution": "node",
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "alwaysStrict": true,
     "strictNullChecks": true,
     "downlevelIteration": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitAny": true,
     "baseUrl": "."
-  },
-  "exclude": ["node_modules"]
+  }
 }

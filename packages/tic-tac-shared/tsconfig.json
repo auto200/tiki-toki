@@ -1,13 +1,12 @@
 {
-    "extends": "tsconfig/base.json",
-    "compilerOptions": {
-        "strictFunctionTypes": true,
-        "outDir": "dist",
-    },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "src/**/*test.ts"
-    ]
+  "extends": "tsconfig/base.json",
+  "compilerOptions": {
+    "strictFunctionTypes": true,
+    "outDir": "dist",
+    "target": "ES2019",
+    "module": "commonjs",
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
 }

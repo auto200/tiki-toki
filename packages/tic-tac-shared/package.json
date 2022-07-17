@@ -1,18 +1,25 @@
 {
   "name": "tic-tac-shared",
   "version": "1.0.0",
+  "module": "dist/index.js",
   "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "tsc --project tsconfig.build.json"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
+    "@types/lodash": "^4.14.182",
     "jest": "^28.1.2",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.2",
     "tsconfig": "*",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "nanoid": "^3.3.4"
   }
 }
