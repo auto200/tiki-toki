@@ -5,8 +5,7 @@
     "outDir": "dist",
     "target": "ES2019",
     "module": "commonjs",
+    "baseUrl": "/src"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
+  "include": ["src/**/*.ts"]
 }
