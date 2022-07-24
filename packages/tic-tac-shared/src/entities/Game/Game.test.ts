@@ -32,10 +32,10 @@ describe("Game", () => {
     const INITIAL_PLAYER_TURN: PlayerKey = "one";
 
     it("should create game correctly", () => {
-        const players: Players = {
-            one: Player.create(PLAYER_ONE_ID, createPlayerPieces(PLAYER_ONE_ID)),
-            two: Player.create(PLAYER_TWO_ID, createPlayerPieces(PLAYER_TWO_ID)),
-        };
+        const players = Players.create(
+            Player.create(PLAYER_ONE_ID, createPlayerPieces(PLAYER_ONE_ID)),
+            Player.create(PLAYER_TWO_ID, createPlayerPieces(PLAYER_TWO_ID)),
+        );
         const board = Board.create(createBoardCells());
         const game = Game.create(players, board, INITIAL_PLAYER_TURN, GAME_ID);
 

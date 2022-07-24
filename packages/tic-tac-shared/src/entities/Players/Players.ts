@@ -9,9 +9,9 @@ export type Players = {
 export type PlayerKey = keyof Players;
 
 export const Players = {
-    create: (playerOneId: string, playerTwoId: string): Players => ({
-        one: Player.create(playerOneId),
-        two: Player.create(playerTwoId),
+    create: (playerOne: Player, playerTwo: Player): Players => ({
+        one: playerOne,
+        two: playerTwo,
     }),
     getInitialPlayerTurn: (players: Players): PlayerKey =>
         sample(Object.keys(players) as PlayerKey[])!,
