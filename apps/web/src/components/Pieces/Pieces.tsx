@@ -1,28 +1,22 @@
+import { Piece } from "@components/Piece/Piece";
 import { Container, SimpleGrid } from "@mantine/core";
-import { Piece, PieceSize } from "tic-tac-shared";
-
-const PIECE_SIZE_TO_PX: { [key in PieceSize]: number } = {
-    [PieceSize.small]: 30,
-    [PieceSize.medium]: 50,
-    [PieceSize.big]: 70,
-};
+import { PieceType } from "common/models";
+import { Piece as GamePiece } from "tic-tac-shared";
 
 type PiecesProps = {
-    pieces: Piece[];
+    pieces: GamePiece[];
     turnActive: boolean;
-    piecesColor: "enemy" | "ally";
-    selectedPieceId: Piece["id"] | null;
-    setSelectedPieceId: (id: string) => void;
+    piecesType: PieceType;
+    selectedPieceId: GamePiece["id"] | null;
+    selectPiece: (id: string) => void;
 };
-
-const BASE_BORDER_WIDTH = 2;
 
 export const Pieces: React.FC<PiecesProps> = ({
     pieces,
     turnActive,
-    piecesColor,
+    piecesType,
     selectedPieceId,
-    setSelectedPieceId,
+    selectPiece,
 }) => {
     return (
         <SimpleGrid
@@ -40,7 +34,7 @@ export const Pieces: React.FC<PiecesProps> = ({
                 return (
                     <Container
                         key={piece.id}
-                        onClick={() => canUse && setSelectedPieceId(piece.id)}
+                        onClick={() => canUse && selectPiece(piece.id)}
                         sx={({ colors, spacing }) => ({
                             display: "flex",
                             alignItems: "center",
@@ -56,19 +50,7 @@ export const Pieces: React.FC<PiecesProps> = ({
                                 selectedPieceId === piece.id ? `3px solid ${colors.dark[5]}` : "",
                         })}
                     >
-                        <Container
-                            sx={({ colors }) => ({
-                                border: `2px solid ${
-                                    piecesColor === "ally" ? colors.green[8] : colors.red[8]
-                                }`,
-                                borderWidth: BASE_BORDER_WIDTH + piece.size,
-                                borderRadius: "50%",
-                                padding: 0,
-                                width: PIECE_SIZE_TO_PX[piece.size],
-                                height: PIECE_SIZE_TO_PX[piece.size],
-                                ...(piece.used && { visibility: "hidden" }),
-                            })}
-                        />
+                        <Piece piece={piece} type={piecesType} />
                     </Container>
                 );
             })}

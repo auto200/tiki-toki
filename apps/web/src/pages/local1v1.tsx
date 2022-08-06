@@ -1,6 +1,7 @@
 import { Board as GameBoard } from "@components/Board";
 import { Pieces } from "@components/Pieces";
 import { Center, Stack } from "@mantine/core";
+import { getPieceType } from "common/utils";
 import { NextPage } from "next";
 import { useMemo, useState } from "react";
 import { Board, Cell, Game, Piece, Player, Players } from "tic-tac-shared";
@@ -16,7 +17,6 @@ const Home: NextPage = () => {
 
     const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
 
-    const currentTurnPlayer: Player = useMemo(() => Game.getCurrentTurnPlayer(game), [game]);
     const selectedPiece: Piece | null = useMemo(
         () =>
             selectedPieceId
@@ -58,21 +58,22 @@ const Home: NextPage = () => {
                 <Pieces
                     pieces={game.players.two.pieces}
                     turnActive={playerTurn === "two"}
-                    piecesColor="enemy"
+                    piecesType="enemy"
                     selectedPieceId={selectedPieceId}
-                    setSelectedPieceId={setSelectedPieceId}
+                    selectPiece={setSelectedPieceId}
                 />
                 <GameBoard
                     board={game.board}
                     canPlaceIn={cellIdsThatSelectedPieceCanBePlacedIn}
                     makeMove={makeMove}
+                    getPieceType={piece => getPieceType(game.players, piece)}
                 />
                 <Pieces
                     pieces={[...game.players.one.pieces].reverse()}
                     turnActive={playerTurn === "one"}
-                    piecesColor="ally"
+                    piecesType="ally"
                     selectedPieceId={selectedPieceId}
-                    setSelectedPieceId={setSelectedPieceId}
+                    selectPiece={setSelectedPieceId}
                 />
             </Stack>
         </Center>

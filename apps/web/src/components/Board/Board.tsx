@@ -1,13 +1,16 @@
+import { Piece } from "@components/Piece/Piece";
 import { Container, SimpleGrid } from "@mantine/core";
-import { Board as GameBoard, Cell, GRID_SIZE } from "tic-tac-shared";
+import { PieceType } from "common/models";
+import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared";
 
 type BoardProps = {
     board: GameBoard;
     makeMove: (cellId: Cell["id"]) => void;
     canPlaceIn: Cell["id"][];
+    getPieceType: (piece: GamePiece) => PieceType;
 };
 
-export const Board: React.FC<BoardProps> = ({ board, makeMove, canPlaceIn }) => {
+export const Board: React.FC<BoardProps> = ({ board, makeMove, canPlaceIn, getPieceType }) => {
     return (
         <Container
             sx={{
@@ -51,7 +54,12 @@ export const Board: React.FC<BoardProps> = ({ board, makeMove, canPlaceIn }) => 
                                 }),
                             })}
                         >
-                            {cell.dominantPiece && <Container>{cell.dominantPiece.size}</Container>}
+                            {cell.dominantPiece && (
+                                <Piece
+                                    piece={cell.dominantPiece}
+                                    type={getPieceType(cell.dominantPiece)}
+                                />
+                            )}
                         </Container>
                     );
                 })}

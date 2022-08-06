@@ -19,4 +19,8 @@ export const Players = {
         ...players,
         [playerKey]: Player.usePiece(players[playerKey], piece),
     }),
+    playerIdToPlayerKey: (players: Players, playerId: Player["id"]): PlayerKey | null =>
+        (Object.entries(players).find(([_, player]) => playerId === player.id)?.[0] as
+            | PlayerKey
+            | undefined) || null,
 };
