@@ -32,13 +32,12 @@ export const Game = {
         playerTurn: initialPlayerTurn || Players.getInitialPlayerTurn(players),
     }),
 
-    makeMove: (game: Game, player: Player, piece: Piece, target: Cell): Game => {
-        const isGameFinished = game.state.state === "ENDED";
-        const isPlayerInGame = Game.isPlayerInTheGame(game, player);
-        const isPlayersTurn = game.players[game.playerTurn].id === player.id;
+    makeMove: (game: Game, player: Player, piece: Piece, target: Cell): Game | never => {
+        const isGameInProgress = game.state.state === "PLAYING";
+        const isPlayersTurn = Game.getCurrentTurnPlayer(game).id === player.id;
         const isPlayerPieceOwner = Player.isPieceOwner(player, piece);
         const canPlace = Cell.canPlacePiece(target, piece);
-        if (isGameFinished || !isPlayerInGame || !isPlayersTurn || !isPlayerPieceOwner || !canPlace)
+        if (!isGameInProgress || !isPlayersTurn || !isPlayerPieceOwner || !canPlace)
             throw new Error("Illegal move");
 
         return Game.evaluateGameState({
@@ -47,8 +46,6 @@ export const Game = {
             players: Players.usePiece(game.players, game.playerTurn, piece),
         });
     },
-    isPlayerInTheGame: (game: Game, player: Player): boolean =>
-        Object.values(game.players).some(gamePlayer => gamePlayer.id === player.id),
     evaluateGameState: (game: Game): Game => {
         for (const [condA, condB, condC] of WINNING_CONDITIONS) {
             const cellA = game.board.cells[condA];
@@ -58,9 +55,8 @@ export const Game = {
             const cellAOwner = cellA?.dominantPiece?.ownerId;
             const cellBOwner = cellB?.dominantPiece?.ownerId;
             const cellCOwner = cellC?.dominantPiece?.ownerId;
-            if (!cellAOwner || !cellBOwner || !cellCOwner) {
-                continue;
-            }
+            if (!cellAOwner || !cellBOwner || !cellCOwner) continue;
+
             // end of the game
             if (cellAOwner === cellBOwner && cellBOwner === cellCOwner) {
                 return {
@@ -84,4 +80,5 @@ export const Game = {
         return { ...game, playerTurn: nextTurnPlayerKey };
     },
     getNextTurnPlayerKey: (game: Game): PlayerKey => (game.playerTurn === "one" ? "two" : "one"),
+    getCurrentTurnPlayer: (game: Game): Player => game.players[game.playerTurn],
 };
