@@ -12,7 +12,8 @@ export const Local1v1: React.FC = () => {
     const [game, setGame] = useState(() =>
         Game.create(Players.create(Player.create(PLAYER_ONE), Player.create(PLAYER_TWO))),
     );
-    const { playerTurn } = game;
+    const { playerTurn, state } = game;
+    const gameActive = game.state.state === "PLAYING";
 
     const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
 
@@ -56,7 +57,7 @@ export const Local1v1: React.FC = () => {
             >
                 <Pieces
                     pieces={game.players.two.pieces}
-                    turnActive={playerTurn === "two"}
+                    turnActive={gameActive && playerTurn === "two"}
                     piecesType="enemy"
                     selectedPieceId={selectedPieceId}
                     selectPiece={setSelectedPieceId}
@@ -66,10 +67,11 @@ export const Local1v1: React.FC = () => {
                     canPlaceIn={cellIdsThatSelectedPieceCanBePlacedIn}
                     makeMove={makeMove}
                     getPieceType={piece => getPieceType(game.players, piece)}
+                    selectedPiece={selectedPiece}
                 />
                 <Pieces
                     pieces={[...game.players.one.pieces].reverse()}
-                    turnActive={playerTurn === "one"}
+                    turnActive={gameActive && playerTurn === "one"}
                     piecesType="ally"
                     selectedPieceId={selectedPieceId}
                     selectPiece={setSelectedPieceId}
