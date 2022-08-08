@@ -50,7 +50,7 @@ export const Pieces: React.FC<PiecesProps> = ({
                                 selectedPieceId === piece.id ? `3px solid ${colors.dark[5]}` : "",
                         })}
                     >
-                        <Piece piece={piece} type={piecesType} />
+                        <Piece piece={piece} type={piecesType} dimmed={piece.used} />
                     </Container>
                 );
             })}

@@ -20,9 +20,6 @@ const useStyles = createStyles(({ colors }) => ({
             backgroundColor: colors.dark[7],
         },
     },
-    "piece-preview": {
-        opacity: 0.5,
-    },
 }));
 
 type BoardProps = {
@@ -59,7 +56,7 @@ export const Board: React.FC<BoardProps> = ({
                             <Piece
                                 piece={selectedPiece}
                                 type={getPieceType(selectedPiece)}
-                                className={classes["piece-preview"]}
+                                dimmed
                             />
                         ) : cell.dominantPiece ? (
                             <Piece

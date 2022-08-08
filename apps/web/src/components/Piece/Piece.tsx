@@ -12,10 +12,10 @@ const BASE_BORDER_WIDTH = 2;
 type PieceProps = {
     piece: GamePiece;
     type: PieceType;
-    className?: string;
+    dimmed?: boolean;
 };
 
-export const Piece: React.FC<PieceProps> = ({ piece, type, className }) => {
+export const Piece: React.FC<PieceProps> = ({ piece, type, dimmed }) => {
     return (
         <Container
             sx={({ colors }) => ({
@@ -25,9 +25,8 @@ export const Piece: React.FC<PieceProps> = ({ piece, type, className }) => {
                 padding: 0,
                 width: PIECE_SIZE_TO_PX[piece.size],
                 height: PIECE_SIZE_TO_PX[piece.size],
-                ...(piece.used && { visibility: "hidden" }),
+                ...(dimmed && { opacity: 0.2 }),
             })}
-            className={className}
         />
     );
 };
