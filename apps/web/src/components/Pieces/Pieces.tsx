@@ -22,8 +22,9 @@ export const Pieces: React.FC<PiecesProps> = ({
         <SimpleGrid
             cols={3}
             breakpoints={[{ minWidth: 600, cols: 6 }]}
-            sx={({ colors, spacing }) => ({
-                padding: spacing.lg,
+            m="sm"
+            p="sm"
+            sx={({ colors }) => ({
                 ...(turnActive && {
                     outline: `2px solid ${colors.gray[4]}`,
                 }),

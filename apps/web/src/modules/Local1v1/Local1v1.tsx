@@ -1,4 +1,5 @@
 import { Board as GameBoard } from "@components/Board";
+import { EndGameModal } from "@components/EndGameModal/EndGameModal";
 import { Pieces } from "@components/Pieces";
 import { Center, Stack } from "@mantine/core";
 import { getPieceType } from "common/utils";
@@ -7,14 +8,11 @@ import { Board, Cell, Game, Piece, Player, Players } from "tic-tac-shared";
 
 const PLAYER_ONE = "PLAYER_ONE";
 const PLAYER_TWO = "PLAYER_TWO";
+const initGame = () =>
+    Game.create(Players.create(Player.create(PLAYER_ONE), Player.create(PLAYER_TWO)));
 
 export const Local1v1: React.FC = () => {
-    const [game, setGame] = useState(() =>
-        Game.create(Players.create(Player.create(PLAYER_ONE), Player.create(PLAYER_TWO))),
-    );
-    const { playerTurn, state } = game;
-    const gameActive = game.state.state === "PLAYING";
-
+    const [game, setGame] = useState(initGame);
     const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
 
     const selectedPiece: Piece | null = useMemo(
@@ -24,11 +22,22 @@ export const Local1v1: React.FC = () => {
                 : null,
         [selectedPieceId, game],
     );
-    const cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][] = useMemo(() => {
-        return game.state.state !== "PLAYING" || !selectedPiece
-            ? []
-            : Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece);
-    }, [selectedPiece, game]);
+    const cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][] = useMemo(
+        () =>
+            game.state.state !== "PLAYING" || !selectedPiece
+                ? []
+                : Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece),
+        [selectedPiece, game],
+    );
+    const winnerName = useMemo(
+        () =>
+            game.state.state === "ENDED" &&
+            Players.playerIdToPlayerKey(game.players, game.state.winnerId),
+        [game],
+    );
+
+    const { playerTurn } = game;
+    const gameActive = game.state.state === "PLAYING";
 
     const makeMove = (cellId: string) => {
         const currentTurnPlayer = Game.getCurrentTurnPlayer(game);
@@ -41,42 +50,51 @@ export const Local1v1: React.FC = () => {
             console.log("couldn't make a move");
         }
     };
+    console.log(game);
 
     return (
-        <Center
-            sx={{
-                minHeight: "100vh",
-            }}
-        >
-            <Stack
+        <>
+            <Center
                 sx={{
-                    justifyContent: "center",
-                    width: "100%",
-                    maxWidth: 600,
+                    minHeight: "100vh",
                 }}
             >
-                <Pieces
-                    pieces={game.players.two.pieces}
-                    turnActive={gameActive && playerTurn === "two"}
-                    piecesType="enemy"
-                    selectedPieceId={selectedPieceId}
-                    selectPiece={setSelectedPieceId}
-                />
-                <GameBoard
-                    board={game.board}
-                    canPlaceIn={cellIdsThatSelectedPieceCanBePlacedIn}
-                    makeMove={makeMove}
-                    getPieceType={piece => getPieceType(game.players, piece)}
-                    selectedPiece={selectedPiece}
-                />
-                <Pieces
-                    pieces={[...game.players.one.pieces].reverse()}
-                    turnActive={gameActive && playerTurn === "one"}
-                    piecesType="ally"
-                    selectedPieceId={selectedPieceId}
-                    selectPiece={setSelectedPieceId}
-                />
-            </Stack>
-        </Center>
+                <Stack
+                    sx={{
+                        justifyContent: "center",
+                        width: "100%",
+                        maxWidth: 660,
+                        gap: 0,
+                    }}
+                >
+                    <Pieces
+                        pieces={game.players.two.pieces}
+                        turnActive={gameActive && playerTurn === "two"}
+                        piecesType="enemy"
+                        selectedPieceId={selectedPieceId}
+                        selectPiece={setSelectedPieceId}
+                    />
+                    <GameBoard
+                        board={game.board}
+                        canPlaceIn={cellIdsThatSelectedPieceCanBePlacedIn}
+                        makeMove={makeMove}
+                        getPieceType={piece => getPieceType(game.players, piece)}
+                        selectedPiece={selectedPiece}
+                    />
+                    <Pieces
+                        pieces={[...game.players.one.pieces].reverse()}
+                        turnActive={gameActive && playerTurn === "one"}
+                        piecesType="ally"
+                        selectedPieceId={selectedPieceId}
+                        selectPiece={setSelectedPieceId}
+                    />
+                </Stack>
+            </Center>
+            <EndGameModal
+                gameState={game.state.state}
+                winnerName={winnerName || ""}
+                onRestart={() => setGame(initGame())}
+            />
+        </>
     );
 };
