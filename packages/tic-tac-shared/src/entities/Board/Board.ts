@@ -17,4 +17,8 @@ export const Board = {
             boardCell.id === targetCell.id ? Cell.placePiece(targetCell, piece) : boardCell,
         ),
     }),
+    getCellById: (board: Board, cellId: Cell["id"]): Cell | null =>
+        board.cells.find(({ id }) => cellId === id) || null,
+    getAllCellIdsThatPieceCanBePlacedIn: (board: Board, piece: Piece): string[] =>
+        board.cells.filter(cell => Cell.canPlacePiece(cell, piece)).map(({ id }) => id),
 };

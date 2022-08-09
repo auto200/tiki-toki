@@ -29,6 +29,8 @@ export const Player = {
             playerPiece.id === piece.id ? { ...playerPiece, used: true } : playerPiece,
         ),
     }),
+    getPieceById: (player: Player, pieceId: Piece["id"]): Piece | null =>
+        player.pieces.find(({ id }) => id === pieceId) || null,
     canMakeAnyMove: (player: Player, board: Board): boolean =>
         player.pieces.some(
             piece => !piece.used && board.cells.some(cell => Cell.canPlacePiece(cell, piece)),
