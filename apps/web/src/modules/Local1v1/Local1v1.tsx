@@ -3,7 +3,7 @@ import { EndGameModal } from "@components/EndGameModal/EndGameModal";
 import { Pieces } from "@components/Pieces";
 import { Center, Stack } from "@mantine/core";
 import { getPieceType } from "common/utils";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Board, Cell, Game, Piece, Player, Players } from "tic-tac-shared";
 
 const PLAYER_ONE = "PLAYER_ONE";
@@ -15,29 +15,17 @@ export const Local1v1: React.FC = () => {
     const [game, setGame] = useState(initGame);
     const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
 
-    const selectedPiece: Piece | null = useMemo(
-        () =>
-            selectedPieceId
-                ? Player.getPieceById(Game.getCurrentTurnPlayer(game), selectedPieceId)
-                : null,
-        [selectedPieceId, game],
-    );
-    const cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][] = useMemo(
-        () =>
-            game.state.state !== "PLAYING" || !selectedPiece
-                ? []
-                : Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece),
-        [selectedPiece, game],
-    );
-    const winnerName = useMemo(
-        () =>
-            game.state.state === "ENDED" &&
-            Players.playerIdToPlayerKey(game.players, game.state.winnerId),
-        [game],
-    );
-
-    const { playerTurn } = game;
-    const gameActive = game.state.state === "PLAYING";
+    const { playerTurn, state } = game;
+    const isGameActive = game.state.state === "PLAYING";
+    const selectedPiece: Piece | null = selectedPieceId
+        ? Player.getPieceById(Game.getCurrentTurnPlayer(game), selectedPieceId)
+        : null;
+    const cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][] =
+        state.state === "PLAYING" && selectedPiece
+            ? Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece)
+            : [];
+    const winnerName =
+        state.state === "ENDED" ? Players.playerIdToPlayerKey(game.players, state.winnerId) : null;
 
     const makeMove = (cellId: string) => {
         const currentTurnPlayer = Game.getCurrentTurnPlayer(game);
@@ -50,7 +38,6 @@ export const Local1v1: React.FC = () => {
             console.log("couldn't make a move");
         }
     };
-    console.log(game);
 
     return (
         <>
@@ -69,7 +56,7 @@ export const Local1v1: React.FC = () => {
                 >
                     <Pieces
                         pieces={game.players.two.pieces}
-                        turnActive={gameActive && playerTurn === "two"}
+                        turnActive={isGameActive && playerTurn === "two"}
                         piecesType="enemy"
                         selectedPieceId={selectedPieceId}
                         selectPiece={setSelectedPieceId}
@@ -83,7 +70,7 @@ export const Local1v1: React.FC = () => {
                     />
                     <Pieces
                         pieces={[...game.players.one.pieces].reverse()}
-                        turnActive={gameActive && playerTurn === "one"}
+                        turnActive={isGameActive && playerTurn === "one"}
                         piecesType="ally"
                         selectedPieceId={selectedPieceId}
                         selectPiece={setSelectedPieceId}
