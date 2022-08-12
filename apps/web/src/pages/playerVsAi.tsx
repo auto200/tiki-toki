@@ -1,17 +1,16 @@
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 
-// later on we gonna add some kind of shared layout
-const Local1v1: NextPage = () => {
+const PlayerVsAi: NextPage = () => {
     //ad1. Lazy importing actual game because there is no additional value in
     //prerendering and it only generates css class mismatches
     //ad2. nextjs' `dynamic` typing - https://stackoverflow.com/a/69353026
-    const Local1v1 = dynamic<{}>(
-        import("modules/Local1v1").then(mod => mod.Local1v1),
+    const PlayerVsAi = dynamic<{}>(
+        import("modules/PlayerVsAi").then(mod => mod.PlayerVsAi),
         { ssr: false },
     );
 
-    return <Local1v1 />;
+    return <PlayerVsAi />;
 };
 
-export default Local1v1;
+export default PlayerVsAi;

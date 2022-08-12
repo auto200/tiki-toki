@@ -11,10 +11,12 @@ const Home: NextPage = () => {
         >
             <Group>
                 <Button disabled>Play online</Button>
-                <Link href="local1v1">
+                <Link href="/local1v1">
                     <Button>Local 1v1</Button>
                 </Link>
-                <Button disabled>Play against AI</Button>
+                <Link href="/playerVsAi">
+                    <Button>Play against AI</Button>
+                </Link>
             </Group>
         </Center>
     );
