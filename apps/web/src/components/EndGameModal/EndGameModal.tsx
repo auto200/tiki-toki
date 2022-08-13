@@ -17,14 +17,14 @@ export const EndGameModal: React.FC<EndGameModalProps> = ({ gameState, winnerNam
             closeOnClickOutside={false}
             onClose={() => {}}
         >
-            <Center>
+            <Center data-cy="end-game-modal">
                 <Stack>
                     <Title align="center">
                         {gameState === "ENDED" && `Player ${winnerName} won!`}
                         {gameState === "DRAW" && `Draw!`}
                     </Title>
                     <Container>
-                        <Button color="grape" onClick={onRestart}>
+                        <Button color="grape" onClick={onRestart} data-cy="restart-game">
                             Restart
                         </Button>
                     </Container>

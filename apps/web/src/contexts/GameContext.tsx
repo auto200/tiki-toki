@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
-import { Board, Cell, Game, Piece, Player, Players } from "tic-tac-shared";
+import { Board, Cell, Game, Piece, Player, PlayerKey, Players } from "tic-tac-shared";
 
 type GameContextValue = {
     game: Game;
@@ -9,9 +9,9 @@ type GameContextValue = {
     isGameActive: boolean;
     selectedPiece: Piece | null;
     cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][];
-    winnerName: keyof Players | null;
+    winnerName: PlayerKey | null;
     makeMove: (cellId: Cell["id"]) => void;
-    restartGame: () => void;
+    restartGame: (startingPlayer?: PlayerKey) => void;
 };
 
 const GameContext = createContext<GameContextValue>({} as any);
@@ -19,8 +19,12 @@ const GameContext = createContext<GameContextValue>({} as any);
 const PLAYER_ONE = "PLAYER_ONE";
 const PLAYER_TWO = "PLAYER_TWO";
 
-const initGame = () =>
-    Game.create(Players.create(Player.create(PLAYER_ONE), Player.create(PLAYER_TWO)));
+const initGame = (startingPlayer?: PlayerKey) =>
+    Game.create(
+        Players.create(Player.create(PLAYER_ONE), Player.create(PLAYER_TWO)),
+        undefined,
+        startingPlayer,
+    );
 
 export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [game, setGame] = useState(initGame);
@@ -50,7 +54,10 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
             console.log("couldn't make a move");
         }
     };
-    const restartGame = useCallback(() => setGame(initGame()), []);
+    const restartGame = useCallback(
+        (startingPlayer?: PlayerKey) => setGame(initGame(startingPlayer)),
+        [],
+    );
 
     return (
         <GameContext.Provider

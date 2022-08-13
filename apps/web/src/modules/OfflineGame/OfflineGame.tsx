@@ -4,14 +4,16 @@ import { Pieces } from "@components/Pieces";
 import { Center, Stack } from "@mantine/core";
 import { getPieceType } from "common/utils";
 import { useGame } from "contexts/GameContext";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Game } from "tic-tac-shared";
+import { Game, PlayerKey } from "tic-tac-shared";
 
 export type OfflineGameProps = {
     mode: "local1v1" | "playerVsAi";
 };
 
 export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
+    const { startingPlayer } = useRouter().query;
     const {
         game,
         setGame,
@@ -26,7 +28,12 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
     } = useGame();
 
     useEffect(() => {
-        restartGame();
+        if (!startingPlayer) return;
+        restartGame(startingPlayer as PlayerKey);
+    }, [startingPlayer, restartGame]);
+
+    useEffect(() => {
+        () => restartGame();
     }, [restartGame]);
 
     // AI moves

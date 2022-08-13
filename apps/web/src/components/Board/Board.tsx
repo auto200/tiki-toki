@@ -42,11 +42,12 @@ export const Board: React.FC<BoardProps> = ({
 
     return (
         <SimpleGrid cols={GRID_SIZE} spacing="sm" className={classes.grid}>
-            {board.cells.map(cell => {
+            {board.cells.map((cell, i) => {
                 const canPlace = canPlaceIn.includes(cell.id);
                 return (
                     <Center
                         key={cell.id}
+                        data-cy={`cell-${i}`}
                         onClick={() => canPlace && makeMove(cell.id)}
                         className={cx(classes.cell, { [classes["cell--can-place"]]: canPlace })}
                         onMouseEnter={() => setHoveringCellId(cell.id)}

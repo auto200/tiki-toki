@@ -12,7 +12,7 @@ const Home: NextPage = () => {
             <Group>
                 <Button disabled>Play online</Button>
                 <Link href="/local1v1">
-                    <Button>Local 1v1</Button>
+                    <Button data-cy="local1v1">Local 1v1</Button>
                 </Link>
                 <Link href="/playerVsAi">
                     <Button>Play against AI</Button>

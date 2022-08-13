@@ -30,11 +30,12 @@ export const Pieces: React.FC<PiecesProps> = ({
                 }),
             })}
         >
-            {pieces.map(piece => {
+            {pieces.map((piece, i) => {
                 const canUse = turnActive && !piece.used;
                 return (
                     <Container
                         key={piece.id}
+                        data-cy={`piece-${piecesType}-${i}`}
                         onClick={() => canUse && selectPiece(piece.id)}
                         sx={({ colors, spacing }) => ({
                             display: "flex",
