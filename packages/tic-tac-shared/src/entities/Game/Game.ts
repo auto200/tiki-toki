@@ -50,7 +50,7 @@ export const Game = {
     getRandomMove: (game: Game): { cell: Cell; piece: Piece } | null => {
         const player = Game.getCurrentTurnPlayer(game);
         const availablePieces = player.pieces.filter(piece => !piece.used);
-        const piecesWithTargetCell = availablePieces
+        const piecesWithRandomTargetCell = availablePieces
             .map(piece => {
                 const cells = game.board.cells.filter(cell => Cell.canPlacePiece(cell, piece));
                 const target = sample(cells);
@@ -61,8 +61,7 @@ export const Game = {
                 };
             })
             .filter(isNotNullable);
-        if (piecesWithTargetCell.length === 0) return null;
-        return sample(piecesWithTargetCell) || null;
+        return sample(piecesWithRandomTargetCell) || null;
     },
     evaluateGameState: (game: Game): Game => {
         for (const [condA, condB, condC] of WINNING_CONDITIONS) {

@@ -5,10 +5,16 @@ import { Center, Stack } from "@mantine/core";
 import { getPieceType } from "common/utils";
 import { useGame } from "contexts/GameContext";
 import { useEffect } from "react";
+import { Game } from "tic-tac-shared";
 
-export const Local1v1: React.FC = () => {
+export type OfflineGameProps = {
+    mode: "local1v1" | "playerVsAi";
+};
+
+export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
     const {
         game,
+        setGame,
         selectedPieceId,
         setSelectedPieceId,
         selectedPiece,
@@ -22,6 +28,15 @@ export const Local1v1: React.FC = () => {
     useEffect(() => {
         restartGame();
     }, [restartGame]);
+
+    // AI moves
+    useEffect(() => {
+        if (mode === "local1v1") return;
+        if (game.playerTurn === "one") return;
+        const move = Game.getRandomMove(game);
+        if (!move) return;
+        setGame(Game.makeMove(game, Game.getCurrentTurnPlayer(game), move.piece, move.cell));
+    }, [game, setGame, mode]);
 
     const { playerTurn } = game;
 
