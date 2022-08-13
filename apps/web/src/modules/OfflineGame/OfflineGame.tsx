@@ -3,41 +3,42 @@ import { EndGameModal } from "@components/EndGameModal/EndGameModal";
 import { Pieces } from "@components/Pieces";
 import { Center, Stack } from "@mantine/core";
 import { getPieceType } from "common/utils";
-import { useState } from "react";
-import { Board, Cell, Game, Piece, Player, Players } from "tic-tac-shared";
+import { useGame } from "contexts/GameContext";
+import { useEffect } from "react";
+import { Game } from "tic-tac-shared";
 
-const PLAYER_ONE = "PLAYER_ONE";
-const PLAYER_TWO = "PLAYER_TWO";
-const initGame = () =>
-    Game.create(Players.create(Player.create(PLAYER_ONE), Player.create(PLAYER_TWO)));
+export type OfflineGameProps = {
+    mode: "local1v1" | "playerVsAi";
+};
 
-export const Local1v1: React.FC = () => {
-    const [game, setGame] = useState(initGame);
-    const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
+export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
+    const {
+        game,
+        setGame,
+        selectedPieceId,
+        setSelectedPieceId,
+        selectedPiece,
+        cellIdsThatSelectedPieceCanBePlacedIn,
+        isGameActive,
+        makeMove,
+        winnerName,
+        restartGame,
+    } = useGame();
 
-    const { playerTurn, state } = game;
-    const isGameActive = game.state.state === "PLAYING";
-    const selectedPiece: Piece | null = selectedPieceId
-        ? Player.getPieceById(Game.getCurrentTurnPlayer(game), selectedPieceId)
-        : null;
-    const cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][] =
-        state.state === "PLAYING" && selectedPiece
-            ? Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece)
-            : [];
-    const winnerName =
-        state.state === "ENDED" ? Players.playerIdToPlayerKey(game.players, state.winnerId) : null;
+    useEffect(() => {
+        restartGame();
+    }, [restartGame]);
 
-    const makeMove = (cellId: string) => {
-        const currentTurnPlayer = Game.getCurrentTurnPlayer(game);
-        const cell = Board.getCellById(game.board, cellId);
-        if (!selectedPiece || !cell) return;
-        try {
-            setGame(Game.makeMove(game, currentTurnPlayer, selectedPiece, cell));
-            setSelectedPieceId(null);
-        } catch (err) {
-            console.log("couldn't make a move");
-        }
-    };
+    // AI moves
+    useEffect(() => {
+        if (mode === "local1v1") return;
+        if (game.playerTurn === "one") return;
+        const move = Game.getRandomMove(game);
+        if (!move) return;
+        setGame(Game.makeMove(game, Game.getCurrentTurnPlayer(game), move.piece, move.cell));
+    }, [game, setGame, mode]);
+
+    const { playerTurn } = game;
 
     return (
         <>
@@ -80,7 +81,7 @@ export const Local1v1: React.FC = () => {
             <EndGameModal
                 gameState={game.state.state}
                 winnerName={winnerName || ""}
-                onRestart={() => setGame(initGame())}
+                onRestart={restartGame}
             />
         </>
     );

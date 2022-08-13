@@ -1,5 +1,7 @@
+import sample from "lodash/sample";
 import { nanoid } from "nanoid";
 import { WINNING_CONDITIONS } from "../../constants";
+import { isNotNullable } from "../../utils";
 import { Board } from "../Board";
 import { Cell } from "../Cell";
 import { Piece } from "../Piece";
@@ -31,7 +33,6 @@ export const Game = {
         players,
         playerTurn: initialPlayerTurn || Players.getInitialPlayerTurn(players),
     }),
-
     makeMove: (game: Game, player: Player, piece: Piece, target: Cell): Game | never => {
         const isGameInProgress = game.state.state === "PLAYING";
         const isPlayersTurn = Game.getCurrentTurnPlayer(game).id === player.id;
@@ -45,6 +46,22 @@ export const Game = {
             board: Board.placePiece(game.board, target, piece),
             players: Players.usePiece(game.players, game.playerTurn, piece),
         });
+    },
+    getRandomMove: (game: Game): { cell: Cell; piece: Piece } | null => {
+        const player = Game.getCurrentTurnPlayer(game);
+        const availablePieces = player.pieces.filter(piece => !piece.used);
+        const piecesWithRandomTargetCell = availablePieces
+            .map(piece => {
+                const cells = game.board.cells.filter(cell => Cell.canPlacePiece(cell, piece));
+                const target = sample(cells);
+                if (cells.length === 0 || !target) return null;
+                return {
+                    piece,
+                    cell: target,
+                };
+            })
+            .filter(isNotNullable);
+        return sample(piecesWithRandomTargetCell) || null;
     },
     evaluateGameState: (game: Game): Game => {
         for (const [condA, condB, condC] of WINNING_CONDITIONS) {
