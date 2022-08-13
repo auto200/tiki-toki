@@ -1,4 +1,5 @@
 import { MantineProvider } from "@mantine/core";
+import { GameContextProvider } from "contexts/GameContext";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
@@ -23,7 +24,9 @@ export default function App(props: AppProps) {
                     colorScheme: "dark",
                 }}
             >
-                <Component {...pageProps} />
+                <GameContextProvider>
+                    <Component {...pageProps} />
+                </GameContextProvider>
             </MantineProvider>
         </>
     );
