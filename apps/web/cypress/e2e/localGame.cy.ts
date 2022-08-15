@@ -38,3 +38,5 @@ describe("Local Game (1v1)", () => {
         cy.get(common.endGameModal.RESTART_BUTTON).should("be.visible");
     });
 });
+
+export {};
