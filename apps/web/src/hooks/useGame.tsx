@@ -1,20 +1,5 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { Board, Cell, Game, Piece, Player, PlayerKey, Players } from "tic-tac-shared";
-
-type GameContextValue = {
-    game: Game;
-    setGame: React.Dispatch<React.SetStateAction<Game>>;
-    selectedPieceId: string | null;
-    setSelectedPieceId: React.Dispatch<React.SetStateAction<Piece["id"] | null>>;
-    isGameActive: boolean;
-    selectedPiece: Piece | null;
-    cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][];
-    winnerName: PlayerKey | null;
-    makeMove: (cellId: Cell["id"]) => void;
-    restartGame: (startingPlayer?: PlayerKey) => void;
-};
-
-const GameContext = createContext<GameContextValue>({} as any);
 
 const PLAYER_ONE = "PLAYER_ONE";
 const PLAYER_TWO = "PLAYER_TWO";
@@ -26,7 +11,7 @@ const initGame = (startingPlayer?: PlayerKey) =>
         startingPlayer,
     );
 
-export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const useGame = () => {
     const [game, setGame] = useState(initGame);
     const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
 
@@ -59,24 +44,16 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
         [],
     );
 
-    return (
-        <GameContext.Provider
-            value={{
-                game,
-                setGame,
-                selectedPieceId,
-                setSelectedPieceId,
-                isGameActive,
-                selectedPiece,
-                cellIdsThatSelectedPieceCanBePlacedIn,
-                winnerName,
-                makeMove,
-                restartGame,
-            }}
-        >
-            {children}
-        </GameContext.Provider>
-    );
+    return {
+        game,
+        setGame,
+        selectedPieceId,
+        setSelectedPieceId,
+        isGameActive,
+        selectedPiece,
+        cellIdsThatSelectedPieceCanBePlacedIn,
+        winnerName,
+        makeMove,
+        restartGame,
+    };
 };
-
-export const useGame = () => useContext(GameContext);
