@@ -3,7 +3,7 @@ import { EndGameModal } from "@components/EndGameModal/EndGameModal";
 import { Pieces } from "@components/Pieces";
 import { Center, Stack } from "@mantine/core";
 import { getPieceType } from "common/utils";
-import { useGame } from "contexts/GameContext";
+import { useGame } from "hooks/useGame";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Game, PlayerKey } from "tic-tac-shared";
@@ -31,10 +31,6 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         if (!startingPlayer) return;
         restartGame(startingPlayer as PlayerKey);
     }, [startingPlayer, restartGame]);
-
-    useEffect(() => {
-        () => restartGame();
-    }, [restartGame]);
 
     // AI moves
     useEffect(() => {
