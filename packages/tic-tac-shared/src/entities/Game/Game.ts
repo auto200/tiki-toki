@@ -33,13 +33,12 @@ export const Game = {
         players,
         playerTurn: initialPlayerTurn || Players.getInitialPlayerTurn(players),
     }),
-    makeMove: (game: Game, player: Player, piece: Piece, target: Cell): Game | never => {
+    makeMove: (game: Game, piece: Piece, target: Cell): Game | never => {
+        const player = Game.getCurrentTurnPlayer(game);
         const isGameInProgress = game.state.state === "PLAYING";
-        const isPlayersTurn = Game.getCurrentTurnPlayer(game).id === player.id;
         const isPlayerPieceOwner = Player.isPieceOwner(player, piece);
         const canPlace = Cell.canPlacePiece(target, piece);
-        if (!isGameInProgress || !isPlayersTurn || !isPlayerPieceOwner || !canPlace)
-            throw new Error("Illegal move");
+        if (!isGameInProgress || !isPlayerPieceOwner || !canPlace) throw new Error("Illegal move");
 
         return Game.evaluateGameState({
             ...game,

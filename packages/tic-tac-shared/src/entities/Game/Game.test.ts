@@ -158,12 +158,7 @@ describe("Game", () => {
         // |-----------|
         // |   |   |   |
         // |-----------|
-        const game_turn_0 = Game.makeMove(
-            game,
-            players.one,
-            players.one.pieces[0]!,
-            game.board.cells[0]!,
-        );
+        const game_turn_0 = Game.makeMove(game, players.one.pieces[0]!, game.board.cells[0]!);
         // ------------
         // | x |   | o |
         // |-----------|
@@ -173,7 +168,6 @@ describe("Game", () => {
         // |-----------|
         const game_turn_1 = Game.makeMove(
             game_turn_0!,
-            players.two,
             players.two.pieces[0]!,
             game_turn_0!.board.cells[2]!,
         );
@@ -187,7 +181,6 @@ describe("Game", () => {
         // |-----------|
         const game_turn_2 = Game.makeMove(
             game_turn_1!,
-            players.one,
             players.one.pieces[1]!,
             game_turn_1!.board.cells[3]!,
         );
@@ -200,7 +193,6 @@ describe("Game", () => {
         // |-----------|
         const game_turn_3 = Game.makeMove(
             game_turn_2!,
-            players.two,
             players.two.pieces[1]!,
             game_turn_2!.board.cells[5]!,
         );
@@ -213,7 +205,6 @@ describe("Game", () => {
         // |-----------|
         const game_turn_4 = Game.makeMove(
             game_turn_3!,
-            players.one,
             players.one.pieces[3]!,
             game_turn_3!.board.cells[6]!,
         );

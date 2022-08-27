@@ -29,11 +29,10 @@ export const useGame = () => {
             : null;
 
     const makeMove = (cellId: Cell["id"]) => {
-        const currentTurnPlayer = Game.getCurrentTurnPlayer(game);
         const cell = Board.getCellById(game.board, cellId);
         if (!selectedPiece || !cell) return;
         try {
-            setGame(Game.makeMove(game, currentTurnPlayer, selectedPiece, cell));
+            setGame(Game.makeMove(game, selectedPiece, cell));
             setSelectedPieceId(null);
         } catch (err) {
             console.log("couldn't make a move");

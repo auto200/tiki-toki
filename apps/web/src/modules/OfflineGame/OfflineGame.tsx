@@ -38,7 +38,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         if (game.playerTurn === "one") return;
         const move = Game.getRandomMove(game);
         if (!move) return;
-        setGame(Game.makeMove(game, Game.getCurrentTurnPlayer(game), move.piece, move.cell));
+        setGame(Game.makeMove(game, move.piece, move.cell));
     }, [game, setGame, mode]);
 
     const { playerTurn } = game;
