@@ -25,6 +25,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         makeMove,
         winnerName,
         restartGame,
+        allPlayersPieces,
     } = useGame();
 
     useEffect(() => {
@@ -38,7 +39,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         if (game.playerTurn === "one") return;
         const move = Game.getRandomMove(game);
         if (!move) return;
-        setGame(Game.makeMove(game, move.piece, move.cell));
+        setGame(Game.makeMove(game, move.pieceId, move.cellId));
     }, [game, setGame, mode]);
 
     const { playerTurn } = game;
@@ -71,6 +72,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
                         makeMove={makeMove}
                         getPieceType={piece => getPieceType(game.players, piece)}
                         selectedPiece={selectedPiece}
+                        allPlayersPieces={allPlayersPieces}
                     />
                     <Pieces
                         pieces={[...game.players.one.pieces].reverse()}

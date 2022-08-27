@@ -13,8 +13,6 @@ export const Player = {
         id,
         pieces: pieces || Player.initPlayerPieces(id),
     }),
-    isPieceOwner: (player: Player, piece: Piece): boolean =>
-        player.pieces.some(playerPiece => playerPiece.id === piece.id),
     initPlayerPieces: (playerId: string): Player["pieces"] => [
         Piece.create(playerId, PieceSize.small),
         Piece.create(playerId, PieceSize.small),
@@ -31,8 +29,10 @@ export const Player = {
     }),
     getPieceById: (player: Player, pieceId: Piece["id"]): Piece | null =>
         player.pieces.find(({ id }) => id === pieceId) || null,
-    canMakeAnyMove: (player: Player, board: Board): boolean =>
+    canMakeAnyMove: (player: Player, board: Board, allPlayersPieces: Piece[]): boolean =>
         player.pieces.some(
-            piece => !piece.used && board.cells.some(cell => Cell.canPlacePiece(cell, piece)),
+            piece =>
+                !piece.used &&
+                board.cells.some(cell => Cell.canPlacePiece(cell, piece, allPlayersPieces)),
         ),
 };

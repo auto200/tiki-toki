@@ -16,12 +16,13 @@ export const useGame = () => {
     const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
 
     const isGameActive = game.state.state === "PLAYING";
+    const allPlayersPieces = Players.getAllPlayersPieces(game.players);
     const selectedPiece: Piece | null = selectedPieceId
         ? Player.getPieceById(Game.getCurrentTurnPlayer(game), selectedPieceId)
         : null;
     const cellIdsThatSelectedPieceCanBePlacedIn: Cell["id"][] =
         game.state.state === "PLAYING" && selectedPiece
-            ? Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece)
+            ? Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece, allPlayersPieces)
             : [];
     const winnerName =
         game.state.state === "ENDED"
@@ -29,10 +30,9 @@ export const useGame = () => {
             : null;
 
     const makeMove = (cellId: Cell["id"]) => {
-        const cell = Board.getCellById(game.board, cellId);
-        if (!selectedPiece || !cell) return;
+        if (!selectedPieceId) return;
         try {
-            setGame(Game.makeMove(game, selectedPiece, cell));
+            setGame(Game.makeMove(game, selectedPieceId, cellId));
             setSelectedPieceId(null);
         } catch (err) {
             console.log("couldn't make a move");
@@ -54,5 +54,6 @@ export const useGame = () => {
         winnerName,
         makeMove,
         restartGame,
+        allPlayersPieces,
     };
 };

@@ -1,10 +1,10 @@
 import { Button, Center, Container, Modal, Stack, Title } from "@mantine/core";
-import { GameState } from "tic-tac-shared";
+import { GameState, PlayerKey } from "tic-tac-shared";
 
 type EndGameModalProps = {
     gameState: GameState["state"];
     winnerName: string;
-    onRestart: () => void;
+    onRestart: (startingPlayer?: PlayerKey) => void;
 };
 
 export const EndGameModal: React.FC<EndGameModalProps> = ({ gameState, winnerName, onRestart }) => {
@@ -24,7 +24,7 @@ export const EndGameModal: React.FC<EndGameModalProps> = ({ gameState, winnerNam
                         {gameState === "DRAW" && `Draw!`}
                     </Title>
                     <Container>
-                        <Button color="grape" onClick={onRestart} data-cy="restart-game">
+                        <Button color="grape" onClick={() => onRestart()} data-cy="restart-game">
                             Restart
                         </Button>
                     </Container>

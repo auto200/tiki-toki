@@ -1,4 +1,4 @@
-import { Piece } from "@components/Piece/Piece";
+import { Piece } from "@components/Piece";
 import { Center, createStyles, SimpleGrid } from "@mantine/core";
 import { PieceType } from "common/models";
 import { useState } from "react";
@@ -28,6 +28,7 @@ type BoardProps = {
     canPlaceIn: Cell["id"][];
     getPieceType: (piece: GamePiece) => PieceType;
     selectedPiece: GamePiece | null;
+    allPlayersPieces: GamePiece[];
 };
 
 export const Board: React.FC<BoardProps> = ({
@@ -36,6 +37,7 @@ export const Board: React.FC<BoardProps> = ({
     canPlaceIn,
     getPieceType,
     selectedPiece,
+    allPlayersPieces,
 }) => {
     const { classes, cx } = useStyles();
     const [hoveringCellId, setHoveringCellId] = useState<Cell["id"] | null>(null);
@@ -44,6 +46,9 @@ export const Board: React.FC<BoardProps> = ({
         <SimpleGrid cols={GRID_SIZE} spacing="sm" className={classes.grid}>
             {board.cells.map((cell, i) => {
                 const canPlace = canPlaceIn.includes(cell.id);
+                const dominantPiece = allPlayersPieces.find(
+                    ({ id }) => id === cell.dominantPieceId,
+                );
                 return (
                     <Center
                         key={cell.id}
@@ -59,11 +64,8 @@ export const Board: React.FC<BoardProps> = ({
                                 type={getPieceType(selectedPiece)}
                                 dimmed
                             />
-                        ) : cell.dominantPiece ? (
-                            <Piece
-                                piece={cell.dominantPiece}
-                                type={getPieceType(cell.dominantPiece)}
-                            />
+                        ) : dominantPiece ? (
+                            <Piece piece={dominantPiece} type={getPieceType(dominantPiece)} />
                         ) : null}
                     </Center>
                 );

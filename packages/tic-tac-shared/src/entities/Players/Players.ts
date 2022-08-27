@@ -23,4 +23,6 @@ export const Players = {
         (Object.entries(players).find(([_, player]) => playerId === player.id)?.[0] as
             | PlayerKey
             | undefined) || null,
+    getAllPlayersPieces: (players: Players): Piece[] =>
+        Object.values(players).flatMap(player => player.pieces),
 };
