@@ -11,14 +11,20 @@ export const Board = {
     create: (cells: Cell[] = times(GRID_SIZE * GRID_SIZE, () => Cell.create())): Board => ({
         cells,
     }),
-    placePiece: (board: Board, targetCell: Cell, piece: Piece): Board => ({
+    placePiece: (board: Board, targetCellId: Cell["id"], pieceId: Piece["id"]): Board => ({
         ...board,
-        cells: board.cells.map(boardCell =>
-            boardCell.id === targetCell.id ? Cell.placePiece(targetCell, piece) : boardCell,
+        cells: board.cells.map(cell =>
+            cell.id === targetCellId ? Cell.placePiece(cell, pieceId) : cell,
         ),
     }),
     getCellById: (board: Board, cellId: Cell["id"]): Cell | null =>
         board.cells.find(({ id }) => cellId === id) || null,
-    getAllCellIdsThatPieceCanBePlacedIn: (board: Board, piece: Piece): string[] =>
-        board.cells.filter(cell => Cell.canPlacePiece(cell, piece)).map(({ id }) => id),
+    getAllCellIdsThatPieceCanBePlacedIn: (
+        board: Board,
+        piece: Piece,
+        allPLayersPieces: Piece[],
+    ): string[] =>
+        board.cells
+            .filter(cell => Cell.canPlacePiece(cell, piece, allPLayersPieces))
+            .map(({ id }) => id),
 };

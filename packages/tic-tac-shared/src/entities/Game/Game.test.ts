@@ -44,15 +44,15 @@ describe("Game", () => {
             state: { state: "PLAYING" },
             board: {
                 cells: [
-                    { id: "cell-0", dominantPiece: null, pieces: [] },
-                    { id: "cell-1", dominantPiece: null, pieces: [] },
-                    { id: "cell-2", dominantPiece: null, pieces: [] },
-                    { id: "cell-3", dominantPiece: null, pieces: [] },
-                    { id: "cell-4", dominantPiece: null, pieces: [] },
-                    { id: "cell-5", dominantPiece: null, pieces: [] },
-                    { id: "cell-6", dominantPiece: null, pieces: [] },
-                    { id: "cell-7", dominantPiece: null, pieces: [] },
-                    { id: "cell-8", dominantPiece: null, pieces: [] },
+                    { id: "cell-0", dominantPieceId: null, pieces: [] },
+                    { id: "cell-1", dominantPieceId: null, pieces: [] },
+                    { id: "cell-2", dominantPieceId: null, pieces: [] },
+                    { id: "cell-3", dominantPieceId: null, pieces: [] },
+                    { id: "cell-4", dominantPieceId: null, pieces: [] },
+                    { id: "cell-5", dominantPieceId: null, pieces: [] },
+                    { id: "cell-6", dominantPieceId: null, pieces: [] },
+                    { id: "cell-7", dominantPieceId: null, pieces: [] },
+                    { id: "cell-8", dominantPieceId: null, pieces: [] },
                 ],
             },
             players: {
@@ -160,9 +160,8 @@ describe("Game", () => {
         // |-----------|
         const game_turn_0 = Game.makeMove(
             game,
-            players.one,
-            players.one.pieces[0]!,
-            game.board.cells[0]!,
+            players.one.pieces[0]?.id!,
+            game.board.cells[0]?.id!,
         );
         // ------------
         // | x |   | o |
@@ -173,9 +172,8 @@ describe("Game", () => {
         // |-----------|
         const game_turn_1 = Game.makeMove(
             game_turn_0!,
-            players.two,
-            players.two.pieces[0]!,
-            game_turn_0!.board.cells[2]!,
+            players.two.pieces[0]?.id!,
+            game_turn_0!.board.cells[2]?.id!,
         );
 
         // ------------
@@ -187,9 +185,8 @@ describe("Game", () => {
         // |-----------|
         const game_turn_2 = Game.makeMove(
             game_turn_1!,
-            players.one,
-            players.one.pieces[1]!,
-            game_turn_1!.board.cells[3]!,
+            players.one.pieces[1]?.id!,
+            game_turn_1!.board.cells[3]?.id!,
         );
         // ------------
         // | x |   | o |
@@ -200,9 +197,8 @@ describe("Game", () => {
         // |-----------|
         const game_turn_3 = Game.makeMove(
             game_turn_2!,
-            players.two,
-            players.two.pieces[1]!,
-            game_turn_2!.board.cells[5]!,
+            players.two.pieces[1]?.id!,
+            game_turn_2!.board.cells[5]?.id!,
         );
         // ------------
         // | x |   | o |
@@ -213,9 +209,8 @@ describe("Game", () => {
         // |-----------|
         const game_turn_4 = Game.makeMove(
             game_turn_3!,
-            players.one,
-            players.one.pieces[3]!,
-            game_turn_3!.board.cells[6]!,
+            players.one.pieces[3]?.id!,
+            game_turn_3!.board.cells[6]?.id!,
         );
         const expectedGameState: GameState = {
             state: "ENDED",
