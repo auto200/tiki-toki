@@ -1,16 +1,15 @@
-import { Button, Center, Group } from "@mantine/core";
+import { Layout } from "@components/shared/Layout";
+import { Button, Group } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 
 const Home: NextPage = () => {
     return (
-        <Center
-            sx={{
-                minHeight: "100vh",
-            }}
-        >
+        <Layout>
             <Group>
-                <Button disabled>Play online</Button>
+                <Link href="/online">
+                    <Button>Play online</Button>
+                </Link>
                 <Link href="/local1v1">
                     <Button data-cy="local1v1">Local 1v1</Button>
                 </Link>
@@ -18,7 +17,7 @@ const Home: NextPage = () => {
                     <Button>Play against AI</Button>
                 </Link>
             </Group>
-        </Center>
+        </Layout>
     );
 };
 

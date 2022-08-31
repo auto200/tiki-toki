@@ -1,3 +1,4 @@
+import { Layout } from "@components/shared/Layout";
 import { OfflineGameProps } from "modules/OfflineGame/OfflineGame";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
@@ -11,7 +12,11 @@ const PlayerVsAi: NextPage = () => {
         { ssr: false },
     );
 
-    return <OfflineGame mode="playerVsAi" />;
+    return (
+        <Layout>
+            <OfflineGame mode="playerVsAi" />
+        </Layout>
+    );
 };
 
 export default PlayerVsAi;
