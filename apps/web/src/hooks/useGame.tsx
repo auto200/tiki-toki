@@ -16,7 +16,7 @@ export const useGame = () => {
     const [selectedPieceId, setSelectedPieceId] = useState<Piece["id"] | null>(null);
 
     const isGameActive = game.state.state === "PLAYING";
-    const allPlayersPieces = Players.getAllPlayersPieces(game.players);
+    const allPlayersPieces = Game.getAllPlayersPieces(game);
     const selectedPiece: Piece | null = selectedPieceId
         ? Player.getPieceById(Game.getCurrentTurnPlayer(game), selectedPieceId)
         : null;
