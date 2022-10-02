@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { Server } from "socket.io";
+import { ClientStatus } from "tic-tac-shared";
 import { GamePlayer } from "../entities/GamePlayer";
 import GameRoom from "../entities/GameRoom";
 import { GameRoomsService } from "./GameRoomsService";
@@ -10,27 +11,27 @@ export class PairingQueueService {
 
     private playersInQueue: GamePlayer[] = [];
 
-    private isPlayerInQueue(player: GamePlayer): boolean {
-        return this.playersInQueue.some(qPlayer => qPlayer.id === player.id);
-    }
-
     private push(player: GamePlayer): void {
         this.playersInQueue.push(player);
+        player.setState({ status: ClientStatus.IN_QUEUE });
     }
 
     public joinQueue(player: GamePlayer): void {
-        if (this.isPlayerInQueue(player)) return;
         this.push(player);
+        if (this.playersInQueue.length >= PairingQueueService.MAX_QUE_LENGTH) {
+            return this.onQueueFull();
+        }
+    }
 
-        if (this.playersInQueue.length < PairingQueueService.MAX_QUE_LENGTH) return;
-
+    private onQueueFull(): void {
         const [player1, player2] = this.playersInQueue;
-        this.gameRoomsService.addGame(new GameRoom(nanoid(), player1!, player2!, this.io));
+        if (!player1 || !player2) return;
+        this.gameRoomsService.addGame(new GameRoom(nanoid(), player1, player2, this.io));
         this.playersInQueue = [];
     }
 
     public leaveQueue(player: GamePlayer): void {
-        if (!this.isPlayerInQueue(player)) return;
         this.playersInQueue = this.playersInQueue.filter(qPlayer => qPlayer.id !== player.id);
+        player.setState({ status: ClientStatus.IDLE });
     }
 }

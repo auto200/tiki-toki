@@ -3,6 +3,7 @@
   "display": "Default",
   "compilerOptions": {
     "allowJs": false,
+    "target": "ES6",
     "composite": false,
     "declaration": true,
     "esModuleInterop": true,

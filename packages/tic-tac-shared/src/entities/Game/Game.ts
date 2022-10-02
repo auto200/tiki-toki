@@ -1,7 +1,7 @@
 import sample from "lodash/sample";
 import { nanoid } from "nanoid";
-import { WINNING_CONDITIONS } from "../../constants";
 import { isNotNullable } from "../../utils";
+import { WINNING_CONDITIONS } from "../../utils/constants";
 import { Board } from "../Board";
 import { Cell } from "../Cell";
 import { Piece } from "../Piece";
