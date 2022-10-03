@@ -1,7 +1,7 @@
 import sample from "lodash/sample";
 import { nanoid } from "nanoid";
-import { WINNING_CONDITIONS } from "../../constants";
 import { isNotNullable } from "../../utils";
+import { WINNING_CONDITIONS } from "../../utils/constants";
 import { Board } from "../Board";
 import { Cell } from "../Cell";
 import { Piece } from "../Piece";
@@ -44,11 +44,7 @@ export const Game = {
         const targetCell = Board.getCellById(game.board, targetCellId);
         if (!targetCell) throw new Error("Invalid cell id");
 
-        const canPlace = Cell.canPlacePiece(
-            targetCell,
-            piece,
-            Players.getAllPlayersPieces(game.players),
-        );
+        const canPlace = Cell.canPlacePiece(targetCell, piece, Game.getAllPlayersPieces(game));
         if (!canPlace) throw new Error("Illegal move");
 
         return Game.evaluateGameState({
@@ -63,7 +59,7 @@ export const Game = {
         const piecesWithRandomTargetCell = availablePieces
             .map(piece => {
                 const cells = game.board.cells.filter(cell =>
-                    Cell.canPlacePiece(cell, piece, Players.getAllPlayersPieces(game.players)),
+                    Cell.canPlacePiece(cell, piece, Game.getAllPlayersPieces(game)),
                 );
                 const target = sample(cells);
                 if (cells.length === 0 || !target) return null;
@@ -76,7 +72,7 @@ export const Game = {
         return sample(piecesWithRandomTargetCell) || null;
     },
     evaluateGameState: (game: Game): Game => {
-        const allPlayersPieces = Players.getAllPlayersPieces(game.players);
+        const allPlayersPieces = Game.getAllPlayersPieces(game);
         for (const [condA, condB, condC] of WINNING_CONDITIONS) {
             const cellA = game.board.cells[condA];
             const cellB = game.board.cells[condB];
@@ -112,7 +108,7 @@ export const Game = {
         const isDraw = !Player.canMakeAnyMove(
             nextTurnPlayer,
             game.board,
-            Players.getAllPlayersPieces(game.players),
+            Game.getAllPlayersPieces(game),
         );
         if (isDraw) {
             return { ...game, state: { state: "DRAW" } };
@@ -122,4 +118,6 @@ export const Game = {
     },
     getNextTurnPlayerKey: (game: Game): PlayerKey => (game.playerTurn === "one" ? "two" : "one"),
     getCurrentTurnPlayer: (game: Game): Player => game.players[game.playerTurn],
+    getAllPlayersPieces: (game: Game): Piece[] =>
+        Object.values(game.players).flatMap(player => player.pieces),
 };

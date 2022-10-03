@@ -7,7 +7,6 @@ export class PlayersRegistryService {
         this.players.set(player.id, player);
     }
     public removePlayer(player: GamePlayer) {
-        player.disconnected();
         this.players.delete(player.id);
     }
 }

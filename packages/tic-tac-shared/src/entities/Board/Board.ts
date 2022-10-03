@@ -1,5 +1,5 @@
 import times from "lodash/times";
-import { GRID_SIZE } from "../../constants";
+import { GRID_SIZE } from "../../utils";
 import { Cell } from "../Cell";
 import { Piece } from "../Piece";
 

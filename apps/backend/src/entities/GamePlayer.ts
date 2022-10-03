@@ -1,40 +1,22 @@
 import { Socket } from "socket.io";
-import { GameRoomsService } from "../services/GameRoomsService";
-import { PairingQueueService } from "../services/PairingQueueService";
-import GameRoom from "./GameRoom";
-
-type PlayerStatus =
-    | {
-          status: "IDLE";
-      }
-    | { status: "IN_QUEUE" }
-    | {
-          status: "PLAYING";
-          game: GameRoom;
-      };
+import { ClientStatus, PlayerState, SocketEvent } from "tic-tac-shared";
 
 export class GamePlayer {
     public id: string;
 
     constructor(
-        private socket: Socket,
-        private pairingQueueService: PairingQueueService,
-        private gameRoomsService: GameRoomsService,
-        public status: PlayerStatus = { status: "IDLE" },
+        public socket: Socket,
+        private _state: PlayerState = { status: ClientStatus.IDLE },
     ) {
         this.id = socket.id;
     }
 
-    public disconnected(): void {
-        switch (this.status.status) {
-            case "IN_QUEUE": {
-                this.pairingQueueService.leaveQueue(this);
-                break;
-            }
-            case "PLAYING": {
-                this.gameRoomsService.playerLeft(this, this.status.game);
-                break;
-            }
-        }
+    public get state() {
+        return this._state;
+    }
+
+    public setState(status: PlayerState): void {
+        this._state = status;
+        this.socket.emit(SocketEvent.clientState, this._state);
     }
 }

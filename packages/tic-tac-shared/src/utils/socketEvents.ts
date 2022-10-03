@@ -3,4 +3,7 @@ export enum SocketEvent {
     disconnect = "disconnect",
     joinQueue = "join-queue",
     leaveQueue = "leave-queue",
+    gameStart = "gameStart",
+    gameEnd = "gameEnd",
+    clientState = "client-state",
 }

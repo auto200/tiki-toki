@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import { Server as SocketIOServer, Socket } from "socket.io";
-import { SocketEvent } from "tic-tac-shared";
+import { assertNotReachable, ClientStatus, SocketEvent } from "tic-tac-shared";
 import { GamePlayer } from "./entities/GamePlayer";
 import { GameRoomsService } from "./services/GameRoomsService";
 import { PairingQueueService } from "./services/PairingQueueService";
@@ -17,7 +17,7 @@ const server = app.listen(port, () => {
 
 const io = new SocketIOServer(server, {
     //todo: restrict origin
-    cors: { origin: "*" },
+    cors: { origin: ["http://localhost:3000", "*"] },
 });
 
 const playersRegistryService = new PlayersRegistryService();
@@ -26,12 +26,39 @@ const pairingQueueService = new PairingQueueService(gameRoomsService, io);
 
 io.on(SocketEvent.connection, (socket: Socket) => {
     console.log("player connected", socket.id);
-    const player = new GamePlayer(socket, pairingQueueService, gameRoomsService);
+    const player = new GamePlayer(socket);
     playersRegistryService.addPlayer(player);
+
+    socket.on(
+        SocketEvent.joinQueue,
+        () => player.state.status === ClientStatus.IDLE && pairingQueueService.joinQueue(player),
+    );
+    socket.on(
+        SocketEvent.leaveQueue,
+        () =>
+            player.state.status === ClientStatus.IN_QUEUE && pairingQueueService.leaveQueue(player),
+    );
 
     //todo: figure out how to handle reconnecting players
     socket.on(SocketEvent.disconnect, () => {
-        console.log("player disconnected", socket.id);
+        switch (player.state.status) {
+            case ClientStatus.IDLE: {
+                break;
+            }
+            case ClientStatus.IN_QUEUE: {
+                pairingQueueService.leaveQueue(player);
+                break;
+            }
+            case ClientStatus.IN_GAME: {
+                gameRoomsService.playerLeft(player);
+                break;
+            }
+            default: {
+                assertNotReachable(player.state);
+            }
+        }
+
         playersRegistryService.removePlayer(player);
+        console.log("player disconnected", socket.id);
     });
 });
