@@ -1,5 +1,12 @@
 import { Server } from "socket.io";
-import { Game, Player, Players, SocketEvent } from "tic-tac-shared";
+import {
+    ClientStatus,
+    Game,
+    Player,
+    Players,
+    SocketEvent,
+    SocketEventPayloadMakeMove,
+} from "tic-tac-shared";
 import { GamePlayer } from "./GamePlayer";
 
 export default class GameRoom {
@@ -7,23 +14,48 @@ export default class GameRoom {
 
     constructor(
         public readonly id: string,
-        player1: GamePlayer,
-        player2: GamePlayer,
+        private player1: GamePlayer,
+        private player2: GamePlayer,
         private io: Server,
     ) {
-        //todo pass id to game
         this.game = Game.create(
             Players.create(Player.create(player1.id), Player.create(player2.id)),
+            undefined,
+            undefined,
+            id,
         );
+        console.log(JSON.stringify(this.game));
 
         player1.socket.join(id);
         player2.socket.join(id);
 
-        this.emitToPlayers(SocketEvent.gameStart, this.game);
+        this.registerGameEvents();
+        this.emitGameStateToPlayers();
     }
 
     private emitToPlayers(event: SocketEvent, data: unknown) {
         this.io.to(this.id).emit(event, data);
+    }
+
+    private emitGameStateToPlayers() {
+        this.player1.setState({ status: ClientStatus.IN_GAME, game: this.game, playerKey: "one" });
+        this.player2.setState({ status: ClientStatus.IN_GAME, game: this.game, playerKey: "two" });
+    }
+
+    private registerGameEvents() {
+        this.player1.socket.on(SocketEvent.makeMove, this.handleMakeMove.bind(this));
+        this.player2.socket.on(SocketEvent.makeMove, this.handleMakeMove.bind(this));
+    }
+
+    //TODO: runtime typechecking
+    private handleMakeMove({ selectedPieceId, cellId }: SocketEventPayloadMakeMove) {
+        //TODO: handle errors
+        try {
+            this.game = Game.makeMove(this.game, selectedPieceId, cellId);
+            this.emitGameStateToPlayers();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     public playerDisconnected(player: GamePlayer) {

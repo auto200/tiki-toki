@@ -23,4 +23,5 @@ export const Players = {
         (Object.entries(players).find(([_, player]) => playerId === player.id)?.[0] as
             | PlayerKey
             | undefined) || null,
+    getOtherPlayerKey: (key: PlayerKey): PlayerKey => (key === "one" ? "two" : "one"),
 };

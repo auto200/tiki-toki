@@ -1,7 +1,14 @@
 import { GAME_SERVER_URL } from "common/constants";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { ClientStatus, PlayerState, SocketEvent } from "tic-tac-shared";
+import {
+    Cell,
+    ClientStatus,
+    Piece,
+    PlayerState,
+    SocketEvent,
+    SocketEventPayloadMakeMove,
+} from "tic-tac-shared";
 
 type Listener = { register: () => void; unregister: () => void };
 
@@ -42,6 +49,10 @@ export const useOnlineGame = () => {
     const leaveQueue = () => {
         socket.emit(SocketEvent.leaveQueue);
     };
+    const makeMove = (selectedPieceId: Piece["id"], cellId: Cell["id"]) => {
+        const payload: SocketEventPayloadMakeMove = { selectedPieceId, cellId };
+        socket.emit(SocketEvent.makeMove, payload);
+    };
 
-    return { state, joinQueue, leaveQueue };
+    return { state, joinQueue, leaveQueue, makeMove };
 };

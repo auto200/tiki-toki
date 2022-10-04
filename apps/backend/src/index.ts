@@ -17,12 +17,13 @@ const server = app.listen(port, () => {
 
 const io = new SocketIOServer(server, {
     //todo: restrict origin
+    //dunno why it's breaking all the time
     cors: { origin: ["http://localhost:3000", "*"] },
 });
 
 const playersRegistryService = new PlayersRegistryService();
-const gameRoomsService = new GameRoomsService();
-const pairingQueueService = new PairingQueueService(gameRoomsService, io);
+const gameRoomsService = new GameRoomsService(io);
+const pairingQueueService = new PairingQueueService(gameRoomsService);
 
 io.on(SocketEvent.connection, (socket: Socket) => {
     console.log("player connected", socket.id);
