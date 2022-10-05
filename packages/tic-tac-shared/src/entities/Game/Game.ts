@@ -103,10 +103,8 @@ export const Game = {
             }
         }
         //check for draw
-        const nextTurnPlayerKey = Game.getNextTurnPlayerKey(game);
-        const nextTurnPlayer = game.players[nextTurnPlayerKey];
         const isDraw = !Player.canMakeAnyMove(
-            nextTurnPlayer,
+            Game.getCurrentTurnPlayer(game),
             game.board,
             Game.getAllPlayersPieces(game),
         );
@@ -114,10 +112,14 @@ export const Game = {
             return { ...game, state: { state: "DRAW" } };
         }
         //toggle turn
-        return { ...game, playerTurn: nextTurnPlayerKey };
+        return { ...game, playerTurn: Game.getNextTurnPlayerKey(game) };
     },
-    getNextTurnPlayerKey: (game: Game): PlayerKey => (game.playerTurn === "one" ? "two" : "one"),
+    getNextTurnPlayerKey: (game: Game): PlayerKey => Players.getOtherPlayerKey(game.playerTurn),
     getCurrentTurnPlayer: (game: Game): Player => game.players[game.playerTurn],
     getAllPlayersPieces: (game: Game): Piece[] =>
         Object.values(game.players).flatMap(player => player.pieces),
+    getWinnerKey: (game: Game): PlayerKey | null =>
+        game.state.state === "ENDED"
+            ? Players.playerIdToPlayerKey(game.players, game.state.winnerId)
+            : null,
 };

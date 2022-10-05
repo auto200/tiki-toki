@@ -1,12 +1,9 @@
-import { Board as GameBoard } from "@components/Board";
-import { EndGameModal } from "@components/EndGameModal/EndGameModal";
-import { Pieces } from "@components/Pieces";
-import { Stack } from "@mantine/core";
-import { getPieceType } from "common/utils";
-import { useGame } from "hooks/useGame";
+import { EndGameModal } from "@components/EndGameModal";
+import { GameComponent, GameComponentProps } from "@components/GameComponent";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Game, PlayerKey } from "tic-tac-shared";
+import { useGameOfflineGame } from "./hooks/useOfflineGame";
 
 export type OfflineGameProps = {
     mode: "local1v1" | "playerVsAi";
@@ -26,7 +23,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         winnerName,
         restartGame,
         allPlayersPieces,
-    } = useGame();
+    } = useGameOfflineGame();
 
     useEffect(() => {
         if (!startingPlayer) return;
@@ -42,41 +39,23 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         setGame(Game.makeMove(game, move.pieceId, move.cellId));
     }, [game, setGame, mode]);
 
-    const { playerTurn } = game;
+    const gameComponentProps: GameComponentProps = {
+        game,
+        isGameActive,
+        allPlayersPieces,
+        cellIdsThatSelectedPieceCanBePlacedIn,
+        makeMove,
+        selectedPiece,
+        selectedPieceId,
+        setSelectedPieceId,
+        allyPlayerKey: "one",
+        enemyPlayerKey: "two",
+        isMyTurn: mode === "local1v1" ? true : game.playerTurn === "one",
+    };
 
     return (
         <>
-            <Stack
-                sx={{
-                    justifyContent: "center",
-                    width: "100%",
-                    maxWidth: 660,
-                    gap: 0,
-                }}
-            >
-                <Pieces
-                    pieces={game.players.two.pieces}
-                    turnActive={isGameActive && playerTurn === "two"}
-                    piecesType="enemy"
-                    selectedPieceId={selectedPieceId}
-                    selectPiece={setSelectedPieceId}
-                />
-                <GameBoard
-                    board={game.board}
-                    canPlaceIn={cellIdsThatSelectedPieceCanBePlacedIn}
-                    makeMove={makeMove}
-                    getPieceType={piece => getPieceType(game.players, piece)}
-                    selectedPiece={selectedPiece}
-                    allPlayersPieces={allPlayersPieces}
-                />
-                <Pieces
-                    pieces={[...game.players.one.pieces].reverse()}
-                    turnActive={isGameActive && playerTurn === "one"}
-                    piecesType="ally"
-                    selectedPieceId={selectedPieceId}
-                    selectPiece={setSelectedPieceId}
-                />
-            </Stack>
+            <GameComponent {...gameComponentProps} />
             <EndGameModal
                 gameState={game.state.state}
                 winnerName={winnerName || ""}

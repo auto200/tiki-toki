@@ -1,23 +1,22 @@
-import { Piece } from "@components/Piece";
+import { Piece, PieceProps } from "@components/Piece";
 import { Center, createStyles, SimpleGrid } from "@mantine/core";
-import { PieceType } from "common/models";
 import { useState } from "react";
 import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared";
 
 const useStyles = createStyles(({ colors }) => ({
     grid: {
         aspectRatio: "1",
-        backgroundColor: colors.gray[4],
+        backgroundColor: colors.gray![4],
     },
     cell: {
-        backgroundColor: colors.dark[8],
+        backgroundColor: colors.dark![8],
         width: "100%",
         aspectRatio: "1",
     },
     "cell--can-place": {
         cursor: "pointer",
         "&:hover": {
-            backgroundColor: colors.dark[7],
+            backgroundColor: colors.dark![7],
         },
     },
 }));
@@ -26,7 +25,7 @@ type BoardProps = {
     board: GameBoard;
     makeMove: (cellId: Cell["id"]) => void;
     canPlaceIn: Cell["id"][];
-    getPieceType: (piece: GamePiece) => PieceType;
+    getPieceColor: (piece: GamePiece) => PieceProps["color"];
     selectedPiece: GamePiece | null;
     allPlayersPieces: GamePiece[];
 };
@@ -35,7 +34,7 @@ export const Board: React.FC<BoardProps> = ({
     board,
     makeMove,
     canPlaceIn,
-    getPieceType,
+    getPieceColor,
     selectedPiece,
     allPlayersPieces,
 }) => {
@@ -45,7 +44,8 @@ export const Board: React.FC<BoardProps> = ({
     return (
         <SimpleGrid cols={GRID_SIZE} spacing="sm" className={classes.grid}>
             {board.cells.map((cell, i) => {
-                const canPlace = canPlaceIn.includes(cell.id);
+                const isHovering = hoveringCellId === cell.id;
+                const canPlace = selectedPiece && canPlaceIn.includes(cell.id);
                 const dominantPiece = allPlayersPieces.find(
                     ({ id }) => id === cell.dominantPieceId,
                 );
@@ -58,14 +58,14 @@ export const Board: React.FC<BoardProps> = ({
                         onMouseEnter={() => setHoveringCellId(cell.id)}
                         onMouseLeave={() => setHoveringCellId(null)}
                     >
-                        {canPlace && selectedPiece && hoveringCellId === cell.id ? (
+                        {isHovering && canPlace ? (
                             <Piece
                                 piece={selectedPiece}
-                                type={getPieceType(selectedPiece)}
+                                color={getPieceColor(selectedPiece)}
                                 dimmed
                             />
                         ) : dominantPiece ? (
-                            <Piece piece={dominantPiece} type={getPieceType(dominantPiece)} />
+                            <Piece piece={dominantPiece} color={getPieceColor(dominantPiece)} />
                         ) : null}
                     </Center>
                 );

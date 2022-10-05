@@ -1,6 +1,6 @@
 import { common, home } from "../support/selectors";
 
-const selectPiece = (type: "ally" | "enemy", index: number) =>
+const selectPiece = (type: "green" | "red", index: number) =>
     cy.get(`[data-cy="piece-${type}-${index}"]`).click();
 const placePiece = (cellIndex: number) => cy.get(`[data-cy="cell-${cellIndex}"]`).click();
 
@@ -17,19 +17,19 @@ describe("Local Game (1v1)", () => {
         // behavior in dev
         cy.wait(1000);
         //1st turn
-        selectPiece("ally", 0);
+        selectPiece("green", 0);
         placePiece(0);
         //2nd turn
-        selectPiece("enemy", 0);
+        selectPiece("red", 0);
         placePiece(1);
         //3rd turn
-        selectPiece("ally", 1);
+        selectPiece("green", 1);
         placePiece(3);
         //4th turn
-        selectPiece("enemy", 1);
+        selectPiece("red", 1);
         placePiece(4);
         //5th turn
-        selectPiece("ally", 2);
+        selectPiece("green", 2);
         placePiece(6);
     });
 

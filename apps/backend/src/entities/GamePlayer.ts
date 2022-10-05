@@ -15,8 +15,8 @@ export class GamePlayer {
         return this._state;
     }
 
-    public setState(status: PlayerState): void {
-        this._state = status;
+    public setState(state: PlayerState): void {
+        this._state = state;
         this.socket.emit(SocketEvent.clientState, this._state);
     }
 }

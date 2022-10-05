@@ -1,4 +1,4 @@
-import { Game } from "../entities";
+import { Cell, Game, Piece, PlayerKey } from "../entities";
 
 export enum ClientStatus {
     IDLE,
@@ -13,5 +13,11 @@ export type PlayerState =
     | { status: ClientStatus.IN_QUEUE }
     | {
           status: ClientStatus.IN_GAME;
+          playerKey: PlayerKey;
           game: Game;
       };
+
+export type SocketEventPayloadMakeMove = {
+    selectedPieceId: Piece["id"];
+    cellId: Cell["id"];
+};
