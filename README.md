@@ -23,8 +23,30 @@ To use internal package add it as a dev/dependency in app/package `package.json`
 ```json
 // ex. web/package.json
 {
-  "dependencies": {
-    "tsconfig": "*"
-  }
+    "dependencies": {
+        "tsconfig": "*"
+    }
 }
 ```
+
+#### Todos (no strict order):
+
+-   animations
+    -   initial
+    -   move
+    -   winning
+-   i18n
+-   online game end screen
+    -   play again option
+    -   leave
+-   AI
+    -   smarter AI, possibly with adjustable difficulty
+    -   fake AI players in online mode
+-   make sure game looks good on mobile devices
+-   work on menu options look, add some images, in queue indicator
+-   backend rethink and refactor, runtime typechecking
+-   maybe we don't need to send whole game state on each player move
+-   backend tests
+-   dockerization of apps
+-   deployment on AWS
+-   mobile app (React Native)
