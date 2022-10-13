@@ -43,6 +43,7 @@ export const Pieces: React.FC<PiecesProps> = ({
                             alignItems: "center",
                             padding: spacing.sm,
                             aspectRatio: "1",
+                            height: "100%",
                             ...(canUse && {
                                 cursor: "pointer",
                                 "&:hover": {
