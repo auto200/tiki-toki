@@ -12,9 +12,10 @@ export type PieceProps = {
     piece: GamePiece;
     color: "green" | "red";
     dimmed?: boolean;
+    animate?: boolean;
 };
 
-export const Piece: React.FC<PieceProps> = ({ piece, color, dimmed }) => {
+export const Piece: React.FC<PieceProps> = ({ piece, color, dimmed, animate }) => {
     return (
         <Container
             sx={({ colors }) => ({
@@ -25,6 +26,7 @@ export const Piece: React.FC<PieceProps> = ({ piece, color, dimmed }) => {
                 width: PIECE_SIZE_TO_PX[piece.size],
                 height: PIECE_SIZE_TO_PX[piece.size],
                 ...(dimmed && { opacity: 0.2 }),
+                ...(animate && { transition: "opacity 0.2s" }),
             })}
         />
     );

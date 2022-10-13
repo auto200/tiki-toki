@@ -32,8 +32,8 @@ To use internal package add it as a dev/dependency in app/package `package.json`
 #### Todos (no strict order):
 
 -   animations
-    -   initial
-    -   move
+    -   ~~initial~~
+    -   ~~move~~
     -   winning
 -   i18n
 -   online game end screen
