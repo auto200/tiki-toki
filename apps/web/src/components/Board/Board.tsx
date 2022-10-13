@@ -65,7 +65,11 @@ export const Board: React.FC<BoardProps> = ({
                                 dimmed
                             />
                         ) : dominantPiece ? (
-                            <Piece piece={dominantPiece} color={getPieceColor(dominantPiece)} />
+                            <Piece
+                                piece={dominantPiece}
+                                color={getPieceColor(dominantPiece)}
+                                animate
+                            />
                         ) : null}
                     </Center>
                 );

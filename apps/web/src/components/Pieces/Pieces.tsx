@@ -1,5 +1,6 @@
 import { Piece, PieceProps } from "@components/Piece";
 import { Container, SimpleGrid } from "@mantine/core";
+import { motion } from "framer-motion";
 import { Piece as GamePiece } from "tic-tac-shared";
 
 type PiecesProps = {
@@ -10,6 +11,8 @@ type PiecesProps = {
     selectPiece: (id: string) => void;
     canMakeMove: boolean;
 };
+
+const MotionContainer = motion(Container);
 
 export const Pieces: React.FC<PiecesProps> = ({
     pieces,
@@ -34,7 +37,7 @@ export const Pieces: React.FC<PiecesProps> = ({
             {pieces.map((piece, i) => {
                 const canUse = turnActive && canMakeMove && !piece.used;
                 return (
-                    <Container
+                    <MotionContainer
                         key={piece.id}
                         data-cy={`piece-${piecesColor}-${i}`}
                         onClick={() => canUse && selectPiece(piece.id)}
@@ -43,6 +46,7 @@ export const Pieces: React.FC<PiecesProps> = ({
                             alignItems: "center",
                             padding: spacing.sm,
                             aspectRatio: "1",
+                            height: "100%",
                             ...(canUse && {
                                 cursor: "pointer",
                                 "&:hover": {
@@ -52,9 +56,12 @@ export const Pieces: React.FC<PiecesProps> = ({
                             outline:
                                 selectedPieceId === piece.id ? `3px solid ${colors.dark![5]}` : "",
                         })}
+                        initial={{ opacity: 0, scale: 0.3 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: i * 0.12 }}
                     >
-                        <Piece piece={piece} color={piecesColor} dimmed={piece.used} />
-                    </Container>
+                        <Piece piece={piece} color={piecesColor} dimmed={piece.used} animate />
+                    </MotionContainer>
                 );
             })}
         </SimpleGrid>
