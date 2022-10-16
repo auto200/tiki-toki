@@ -1,7 +1,6 @@
 import sample from "lodash/sample";
 import { nanoid } from "nanoid";
-import { isNotNullable } from "../../utils";
-import { WINNING_CONDITIONS } from "../../utils/constants";
+import { isNotNullable, WinningComposition, WINNING_CONDITIONS } from "../../utils";
 import { Board } from "../Board";
 import { Cell } from "../Cell";
 import { Piece } from "../Piece";
@@ -11,7 +10,12 @@ import { PlayerKey, Players } from "../Players";
 export type GameState =
     | { state: "PLAYING" }
     | { state: "DRAW" }
-    | { state: "ENDED"; winnerId: string; winningCellsIds: string[] };
+    | {
+          state: "ENDED";
+          winnerId: string;
+          winningCellIndexes: [number, number, number];
+          composition: WinningComposition;
+      };
 export type Game = {
     id: string;
     board: Board;
@@ -73,7 +77,10 @@ export const Game = {
     },
     evaluateGameState: (game: Game): Game => {
         const allPlayersPieces = Game.getAllPlayersPieces(game);
-        for (const [condA, condB, condC] of WINNING_CONDITIONS) {
+        for (const {
+            combo: [condA, condB, condC],
+            composition,
+        } of WINNING_CONDITIONS) {
             const cellA = game.board.cells[condA];
             const cellB = game.board.cells[condB];
             const cellC = game.board.cells[condC];
@@ -97,21 +104,20 @@ export const Game = {
                     state: {
                         state: "ENDED",
                         winnerId: cellAOwner,
-                        winningCellsIds: [cellA.id, cellB.id, cellC.id],
+                        winningCellIndexes: [condA, condB, condC],
+                        composition,
                     },
                 };
             }
         }
-        //check for draw
+
         const isDraw = !Player.canMakeAnyMove(
             Game.getCurrentTurnPlayer(game),
             game.board,
             Game.getAllPlayersPieces(game),
         );
-        if (isDraw) {
-            return { ...game, state: { state: "DRAW" } };
-        }
-        //toggle turn
+        if (isDraw) return { ...game, state: { state: "DRAW" } };
+
         return { ...game, playerTurn: Game.getNextTurnPlayerKey(game) };
     },
     getNextTurnPlayerKey: (game: Game): PlayerKey => Players.getOtherPlayerKey(game.playerTurn),

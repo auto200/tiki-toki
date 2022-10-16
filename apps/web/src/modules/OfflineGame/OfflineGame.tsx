@@ -1,5 +1,6 @@
 import { EndGameModal } from "@components/EndGameModal";
 import { GameComponent, GameComponentProps } from "@components/GameComponent";
+import { useEndGameModal } from "hooks/useEndGameModal";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Game, PlayerKey } from "tic-tac-shared";
@@ -24,6 +25,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         restartGame,
         allPlayersPieces,
     } = useGameOfflineGame();
+    const { showEndGameModal } = useEndGameModal(game);
 
     useEffect(() => {
         if (!startingPlayer) return;
@@ -57,6 +59,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         <>
             <GameComponent {...gameComponentProps} />
             <EndGameModal
+                show={showEndGameModal}
                 gameState={game.state.state}
                 winnerName={winnerName || ""}
                 onRestart={restartGame}

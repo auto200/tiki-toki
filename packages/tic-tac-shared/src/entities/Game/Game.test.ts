@@ -215,7 +215,8 @@ describe("Game", () => {
         const expectedGameState: GameState = {
             state: "ENDED",
             winnerId: PLAYER_ONE_ID,
-            winningCellsIds: ["cell-0", "cell-3", "cell-6"],
+            winningCellIndexes: [0, 3, 6],
+            composition: "col-1",
         };
         expect(game_turn_4?.state).toEqual(expectedGameState);
     });
