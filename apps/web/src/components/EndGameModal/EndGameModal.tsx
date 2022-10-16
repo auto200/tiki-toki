@@ -2,15 +2,21 @@ import { Button, Center, Container, Modal, Stack, Title } from "@mantine/core";
 import { GameState, PlayerKey } from "tic-tac-shared";
 
 type EndGameModalProps = {
+    show: boolean;
     gameState: GameState["state"];
     winnerName: string;
     onRestart: (startingPlayer?: PlayerKey) => void;
 };
 
-export const EndGameModal: React.FC<EndGameModalProps> = ({ gameState, winnerName, onRestart }) => {
+export const EndGameModal: React.FC<EndGameModalProps> = ({
+    gameState,
+    winnerName,
+    show,
+    onRestart,
+}) => {
     return (
         <Modal
-            opened={gameState === "ENDED" || gameState === "DRAW"}
+            opened={show}
             centered
             closeOnEscape={false}
             withCloseButton={false}

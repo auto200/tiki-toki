@@ -63,6 +63,9 @@ export const GameComponent: React.FC<GameComponentProps> = ({
                     getPieceColor={getPieceColor}
                     selectedPiece={selectedPiece}
                     allPlayersPieces={allPlayersPieces}
+                    winningComposition={
+                        game.state.state === "ENDED" ? game.state.composition : undefined
+                    }
                 />
                 <Pieces
                     pieces={[...allyPieces].reverse()}

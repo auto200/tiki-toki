@@ -2,10 +2,18 @@ import { Piece, PieceProps } from "@components/Piece";
 import { Center, createStyles, SimpleGrid } from "@mantine/core";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared";
+import {
+    Board as GameBoard,
+    Cell,
+    GRID_SIZE,
+    Piece as GamePiece,
+    WinningComposition,
+} from "tic-tac-shared";
+import { WinningStrike } from "./WinningStrike";
 
 const useStyles = createStyles(({ colors }) => ({
     grid: {
+        position: "relative",
         aspectRatio: "1",
         backgroundColor: colors.gray![4],
     },
@@ -54,6 +62,7 @@ type BoardProps = {
     getPieceColor: (piece: GamePiece) => PieceProps["color"];
     selectedPiece: GamePiece | null;
     allPlayersPieces: GamePiece[];
+    winningComposition?: WinningComposition;
 };
 
 export const Board: React.FC<BoardProps> = ({
@@ -63,6 +72,7 @@ export const Board: React.FC<BoardProps> = ({
     getPieceColor,
     selectedPiece,
     allPlayersPieces,
+    winningComposition,
 }) => {
     const { classes, cx } = useStyles();
     const [hoveringCellId, setHoveringCellId] = useState<Cell["id"] | null>(null);
@@ -107,6 +117,7 @@ export const Board: React.FC<BoardProps> = ({
                     </Center>
                 );
             })}
+            {winningComposition && <WinningStrike composition={winningComposition} />}
         </SimpleGrid>
     );
 };

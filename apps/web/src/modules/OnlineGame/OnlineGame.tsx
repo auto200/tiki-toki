@@ -1,6 +1,6 @@
-import { Box, Button, Center, Modal, Stack, Title } from "@mantine/core";
+import { Box, Button, Center, Stack } from "@mantine/core";
 import React from "react";
-import { assertNotReachable, ClientStatus, Game, Players } from "tic-tac-shared";
+import { assertNotReachable, ClientStatus, Players } from "tic-tac-shared";
 import { GameView } from "./components/GameView";
 import { useOnlineGame } from "./hooks/useOnlineGame";
 
@@ -27,34 +27,13 @@ export const OnlineGame: React.FC = () => {
             );
         }
         case ClientStatus.IN_GAME: {
-            const gameState = state.game.state.state;
             return (
-                <>
-                    <GameView
-                        game={state.game}
-                        makeMove={makeMove}
-                        allyPlayerKey={state.playerKey}
-                        enemyPlayerKey={Players.getOtherPlayerKey(state.playerKey)}
-                    />
-                    <Modal
-                        opened={gameState === "ENDED" || gameState === "DRAW"}
-                        centered
-                        closeOnEscape={false}
-                        withCloseButton={false}
-                        closeOnClickOutside={false}
-                        onClose={() => {}}
-                    >
-                        <Center data-cy="end-game-modal">
-                            <Stack>
-                                <Title align="center">
-                                    {gameState === "ENDED" &&
-                                        `Player ${Game.getWinnerKey(state.game)} won!`}
-                                    {gameState === "DRAW" && `Draw!`}
-                                </Title>
-                            </Stack>
-                        </Center>
-                    </Modal>
-                </>
+                <GameView
+                    game={state.game}
+                    makeMove={makeMove}
+                    allyPlayerKey={state.playerKey}
+                    enemyPlayerKey={Players.getOtherPlayerKey(state.playerKey)}
+                />
             );
         }
         default: {
