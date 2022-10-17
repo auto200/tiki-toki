@@ -1,5 +1,5 @@
 import { useGame } from "hooks/useGame";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Cell, Game, Player, PlayerKey, Players } from "tic-tac-shared";
 
 const PLAYER_ONE = "PLAYER_ONE";
@@ -12,23 +12,17 @@ const initGame = (startingPlayer?: PlayerKey) =>
         startingPlayer,
     );
 
-export const useGameOfflineGame = () => {
+export type OfflineGameMode = "local1v1" | "playerVsAi";
+
+export const useOfflineGame = (mode: OfflineGameMode, startingPlayer: PlayerKey) => {
     const [game, setGame] = useState(initGame);
-    const {
-        isGameActive,
-        allPlayersPieces,
-        cellIdsThatSelectedPieceCanBePlacedIn,
-        selectedPiece,
-        selectedPieceId,
-        setSelectedPieceId,
-        winnerName,
-    } = useGame(game);
+    const gameInfo = useGame(game);
 
     const makeMove = (cellId: Cell["id"]) => {
-        if (!selectedPieceId) return;
+        if (!gameInfo.selectedPieceId) return;
         try {
-            setGame(Game.makeMove(game, selectedPieceId, cellId));
-            setSelectedPieceId(null);
+            setGame(Game.makeMove(game, gameInfo.selectedPieceId, cellId));
+            gameInfo.setSelectedPieceId(null);
         } catch (err) {
             console.log("couldn't make a move");
         }
@@ -38,17 +32,25 @@ export const useGameOfflineGame = () => {
         [],
     );
 
+    useEffect(() => {
+        if (!startingPlayer) return;
+        restartGame(startingPlayer as PlayerKey);
+    }, [startingPlayer, restartGame]);
+
+    // AI moves
+    useEffect(() => {
+        if (mode === "local1v1" || game.state.state === "ENDED") return;
+        if (game.playerTurn === "one") return;
+        const move = Game.getRandomMove(game);
+        if (!move) return;
+        setGame(Game.makeMove(game, move.pieceId, move.cellId));
+    }, [game, setGame, mode]);
+
     return {
+        ...gameInfo,
         game,
         setGame,
-        selectedPieceId,
-        setSelectedPieceId,
-        isGameActive,
-        selectedPiece,
-        cellIdsThatSelectedPieceCanBePlacedIn,
-        winnerName,
         makeMove,
         restartGame,
-        allPlayersPieces,
     };
 };

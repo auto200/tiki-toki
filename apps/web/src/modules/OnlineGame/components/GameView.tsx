@@ -1,6 +1,5 @@
 import { GameComponent, GameComponentProps } from "@components/GameComponent";
 import { Center, Modal, Stack, Title } from "@mantine/core";
-import { useEndGameModal } from "hooks/useEndGameModal";
 import { useGame } from "hooks/useGame";
 import React from "react";
 import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared";
@@ -25,8 +24,8 @@ export const GameView: React.FC<GameViewProps> = ({
         selectedPiece,
         selectedPieceId,
         setSelectedPieceId,
+        isEndGameModalOpen,
     } = useGame(game);
-    const { showEndGameModal } = useEndGameModal(game);
 
     const handleMakeMove = (cellId: Cell["id"]) => {
         if (!selectedPieceId) return;
@@ -54,7 +53,7 @@ export const GameView: React.FC<GameViewProps> = ({
         <>
             <GameComponent {...gameComponentProps} />
             <Modal
-                opened={showEndGameModal}
+                opened={isEndGameModalOpen}
                 centered
                 closeOnEscape={false}
                 withCloseButton={false}
