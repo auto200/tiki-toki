@@ -55,14 +55,14 @@ const getCellTransformOrigin = (cellIndex: number): string => {
     }
 };
 
-type BoardProps = {
+export type BoardProps = {
     board: GameBoard;
     makeMove: (cellId: Cell["id"]) => void;
     canPlaceIn: Cell["id"][];
     getPieceColor: (piece: GamePiece) => PieceProps["color"];
     selectedPiece: GamePiece | null;
     allPlayersPieces: GamePiece[];
-    winningComposition?: WinningComposition;
+    endGameComposition?: WinningComposition | "DRAW";
 };
 
 export const Board: React.FC<BoardProps> = ({
@@ -72,7 +72,7 @@ export const Board: React.FC<BoardProps> = ({
     getPieceColor,
     selectedPiece,
     allPlayersPieces,
-    winningComposition,
+    endGameComposition,
 }) => {
     const { classes, cx } = useStyles();
     const [hoveringCellId, setHoveringCellId] = useState<Cell["id"] | null>(null);
@@ -117,7 +117,15 @@ export const Board: React.FC<BoardProps> = ({
                     </Center>
                 );
             })}
-            {winningComposition && <WinningStrike composition={winningComposition} />}
+            {endGameComposition &&
+                (endGameComposition === "DRAW" ? (
+                    <>
+                        <WinningStrike composition={"dia-1"} />
+                        <WinningStrike composition={"dia-2"} />
+                    </>
+                ) : (
+                    <WinningStrike composition={endGameComposition} />
+                ))}
         </SimpleGrid>
     );
 };

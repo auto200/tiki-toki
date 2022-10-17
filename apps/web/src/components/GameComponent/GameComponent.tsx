@@ -1,4 +1,4 @@
-import { Board } from "@components/Board";
+import { Board, BoardProps } from "@components/Board";
 import { PieceProps } from "@components/Piece";
 import { Pieces } from "@components/Pieces";
 import { Stack } from "@mantine/core";
@@ -38,6 +38,11 @@ export const GameComponent: React.FC<GameComponentProps> = ({
     const getPieceColor = (piece: Piece): PieceProps["color"] =>
         enemyPieces[0]?.ownerId === piece.ownerId ? "red" : "green";
 
+    const getEndGameComposition = (): BoardProps["endGameComposition"] => {
+        if (game.state.state === "DRAW") return "DRAW";
+        if (game.state.state === "ENDED") return game.state.composition;
+    };
+
     return (
         <>
             <Stack
@@ -63,9 +68,7 @@ export const GameComponent: React.FC<GameComponentProps> = ({
                     getPieceColor={getPieceColor}
                     selectedPiece={selectedPiece}
                     allPlayersPieces={allPlayersPieces}
-                    winningComposition={
-                        game.state.state === "ENDED" ? game.state.composition : undefined
-                    }
+                    endGameComposition={getEndGameComposition()}
                 />
                 <Pieces
                     pieces={[...allyPieces].reverse()}
