@@ -1,20 +1,17 @@
 import { EndGameModal } from "@components/EndGameModal";
 import { GameComponent, GameComponentProps } from "@components/GameComponent";
-import { useEndGameModal } from "hooks/useEndGameModal";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { Game, PlayerKey } from "tic-tac-shared";
-import { useGameOfflineGame } from "./hooks/useOfflineGame";
+import { PlayerKey } from "tic-tac-shared";
+import { OfflineGameMode, useOfflineGame } from "./hooks/useOfflineGame";
 
 export type OfflineGameProps = {
-    mode: "local1v1" | "playerVsAi";
+    mode: OfflineGameMode;
 };
 
 export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
     const { startingPlayer } = useRouter().query;
     const {
         game,
-        setGame,
         selectedPieceId,
         setSelectedPieceId,
         selectedPiece,
@@ -24,22 +21,8 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         winnerName,
         restartGame,
         allPlayersPieces,
-    } = useGameOfflineGame();
-    const { showEndGameModal } = useEndGameModal(game);
-
-    useEffect(() => {
-        if (!startingPlayer) return;
-        restartGame(startingPlayer as PlayerKey);
-    }, [startingPlayer, restartGame]);
-
-    // AI moves
-    useEffect(() => {
-        if (mode === "local1v1") return;
-        if (game.playerTurn === "one") return;
-        const move = Game.getRandomMove(game);
-        if (!move) return;
-        setGame(Game.makeMove(game, move.pieceId, move.cellId));
-    }, [game, setGame, mode]);
+        isEndGameModalOpen,
+    } = useOfflineGame(mode, startingPlayer as PlayerKey);
 
     const gameComponentProps: GameComponentProps = {
         game,
@@ -59,7 +42,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         <>
             <GameComponent {...gameComponentProps} />
             <EndGameModal
-                show={showEndGameModal}
+                show={isEndGameModalOpen}
                 gameState={game.state.state}
                 winnerName={winnerName || ""}
                 onRestart={restartGame}

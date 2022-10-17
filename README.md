@@ -35,6 +35,7 @@ To use internal package add it as a dev/dependency in app/package `package.json`
     -   ~~initial~~
     -   ~~move~~
     -   ~~winning~~
+    -   draw
 -   i18n
 -   online game end screen
     -   play again option
