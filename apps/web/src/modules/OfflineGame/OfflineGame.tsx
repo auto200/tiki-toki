@@ -22,6 +22,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         restartGame,
         allPlayersPieces,
         isEndGameModalOpen,
+        endGameComposition,
     } = useOfflineGame(mode, startingPlayer as PlayerKey);
 
     const gameComponentProps: GameComponentProps = {
@@ -36,6 +37,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         allyPlayerKey: "one",
         enemyPlayerKey: "two",
         isMyTurn: mode === "local1v1" ? true : game.playerTurn === "one",
+        endGameComposition,
     };
 
     return (

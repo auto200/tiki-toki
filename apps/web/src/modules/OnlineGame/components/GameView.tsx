@@ -25,6 +25,7 @@ export const GameView: React.FC<GameViewProps> = ({
         selectedPieceId,
         setSelectedPieceId,
         isEndGameModalOpen,
+        endGameComposition,
     } = useGame(game);
 
     const handleMakeMove = (cellId: Cell["id"]) => {
@@ -47,6 +48,7 @@ export const GameView: React.FC<GameViewProps> = ({
         allyPlayerKey,
         enemyPlayerKey,
         isMyTurn: game.playerTurn === allyPlayerKey,
+        endGameComposition,
     };
 
     return (

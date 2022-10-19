@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { EndGameComposition } from "common/models";
+import { useMemo, useState } from "react";
 import { Board, Cell, Game, Piece, Player } from "tic-tac-shared";
 import { useEndGameModal } from "./useEndGameModal";
 
@@ -16,6 +17,12 @@ export const useGame = (game: Game) => {
             ? Board.getAllCellIdsThatPieceCanBePlacedIn(game.board, selectedPiece, allPlayersPieces)
             : [];
     const winnerName = Game.getWinnerKey(game);
+    const endGameComposition = useMemo<EndGameComposition>(() => {
+        if (game.state.state === "DRAW") return "DRAW";
+        if (game.state.state === "ENDED") return game.state.composition;
+        return null;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [game.state.state]);
 
     return {
         selectedPieceId,
@@ -26,5 +33,6 @@ export const useGame = (game: Game) => {
         winnerName,
         allPlayersPieces,
         isEndGameModalOpen,
+        endGameComposition,
     };
 };

@@ -44,17 +44,17 @@ export const Pieces: React.FC<PiecesProps> = ({
                         sx={({ colors, spacing }) => ({
                             display: "flex",
                             alignItems: "center",
+                            height: "100%",
                             padding: spacing.sm,
                             aspectRatio: "1",
-                            height: "100%",
+                            outline:
+                                selectedPieceId === piece.id ? `3px solid ${colors.dark![5]}` : "",
                             ...(canUse && {
                                 cursor: "pointer",
                                 "&:hover": {
                                     backgroundColor: colors.dark![5],
                                 },
                             }),
-                            outline:
-                                selectedPieceId === piece.id ? `3px solid ${colors.dark![5]}` : "",
                         })}
                         initial={{ opacity: 0, scale: 0.3 }}
                         animate={{ opacity: 1, scale: 1 }}
