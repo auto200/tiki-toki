@@ -1,14 +1,9 @@
 import { Piece, PieceProps } from "@components/Piece";
 import { Center, createStyles, SimpleGrid } from "@mantine/core";
+import { EndGameComposition } from "common/models";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import {
-    Board as GameBoard,
-    Cell,
-    GRID_SIZE,
-    Piece as GamePiece,
-    WinningComposition,
-} from "tic-tac-shared";
+import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared";
 import { WinningStrike } from "./WinningStrike";
 
 const useStyles = createStyles(({ colors }) => ({
@@ -62,7 +57,7 @@ export type BoardProps = {
     getPieceColor: (piece: GamePiece) => PieceProps["color"];
     selectedPiece: GamePiece | null;
     allPlayersPieces: GamePiece[];
-    endGameComposition?: WinningComposition | "DRAW";
+    endGameComposition: EndGameComposition;
 };
 
 export const Board: React.FC<BoardProps> = ({

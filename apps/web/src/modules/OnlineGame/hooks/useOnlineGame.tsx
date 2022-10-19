@@ -1,5 +1,5 @@
 import { GAME_SERVER_URL } from "common/constants";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import {
     Cell,
@@ -43,16 +43,19 @@ export const useOnlineGame = () => {
         };
     }, [socket, globalListeners]);
 
-    const joinQueue = () => {
+    const joinQueue = useCallback(() => {
         socket.emit(SocketEvent.joinQueue);
-    };
+    }, [socket]);
     const leaveQueue = () => {
         socket.emit(SocketEvent.leaveQueue);
     };
-    const makeMove = (selectedPieceId: Piece["id"], cellId: Cell["id"]) => {
-        const payload: SocketEventPayloadMakeMove = { selectedPieceId, cellId };
-        socket.emit(SocketEvent.makeMove, payload);
-    };
+    const makeMove = useCallback(
+        (selectedPieceId: Piece["id"], cellId: Cell["id"]) => {
+            const payload: SocketEventPayloadMakeMove = { selectedPieceId, cellId };
+            socket.emit(SocketEvent.makeMove, payload);
+        },
+        [socket],
+    );
 
     return { state, joinQueue, leaveQueue, makeMove };
 };
