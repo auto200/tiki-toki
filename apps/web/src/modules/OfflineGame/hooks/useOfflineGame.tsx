@@ -16,17 +16,20 @@ export type OfflineGameMode = "local1v1" | "playerVsAi";
 
 export const useOfflineGame = (mode: OfflineGameMode, startingPlayer: PlayerKey) => {
     const [game, setGame] = useState(initGame);
-    const gameInfo = useGame(game);
+    const { selectedPieceId, setSelectedPieceId, ...restGameInfo } = useGame(game);
 
-    const makeMove = (cellId: Cell["id"]) => {
-        if (!gameInfo.selectedPieceId) return;
-        try {
-            setGame(Game.makeMove(game, gameInfo.selectedPieceId, cellId));
-            gameInfo.setSelectedPieceId(null);
-        } catch (err) {
-            console.log("couldn't make a move");
-        }
-    };
+    const makeMove = useCallback(
+        (cellId: Cell["id"]) => {
+            if (!selectedPieceId) return;
+            try {
+                setGame(Game.makeMove(game, selectedPieceId, cellId));
+                setSelectedPieceId(null);
+            } catch (err) {
+                console.log("couldn't make a move");
+            }
+        },
+        [game, selectedPieceId, setSelectedPieceId],
+    );
     const restartGame = useCallback(
         (startingPlayer?: PlayerKey) => setGame(initGame(startingPlayer)),
         [],
@@ -47,9 +50,10 @@ export const useOfflineGame = (mode: OfflineGameMode, startingPlayer: PlayerKey)
     }, [game, setGame, mode]);
 
     return {
-        ...gameInfo,
+        selectedPieceId,
+        setSelectedPieceId,
+        ...restGameInfo,
         game,
-        setGame,
         makeMove,
         restartGame,
     };
