@@ -14,7 +14,7 @@ const initGame = (startingPlayer?: PlayerKey) =>
 
 export type OfflineGameMode = "local1v1" | "playerVsAi";
 
-export const useOfflineGame = (mode: OfflineGameMode, startingPlayer: PlayerKey) => {
+export const useOfflineGame = (mode: OfflineGameMode, startingPlayer?: PlayerKey) => {
     const [game, setGame] = useState(initGame);
     const { selectedPieceId, setSelectedPieceId, ...restGameInfo } = useGame(game);
 
@@ -37,7 +37,7 @@ export const useOfflineGame = (mode: OfflineGameMode, startingPlayer: PlayerKey)
 
     useEffect(() => {
         if (!startingPlayer) return;
-        restartGame(startingPlayer as PlayerKey);
+        restartGame(startingPlayer);
     }, [startingPlayer, restartGame]);
 
     // AI moves

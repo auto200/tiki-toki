@@ -9,7 +9,7 @@ export type OfflineGameProps = {
 };
 
 export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
-    const { startingPlayer } = useRouter().query;
+    const startingPlayer = useRouter().query.startingPlayer as PlayerKey | undefined;
     const {
         game,
         selectedPieceId,
@@ -23,7 +23,7 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         allPlayersPieces,
         isEndGameModalOpen,
         endGameComposition,
-    } = useOfflineGame(mode, startingPlayer as PlayerKey);
+    } = useOfflineGame(mode, startingPlayer);
 
     const gameComponentProps: GameComponentProps = {
         game,
