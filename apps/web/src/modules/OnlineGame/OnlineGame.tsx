@@ -1,6 +1,10 @@
-import { Box, Button, Center, Stack } from "@mantine/core";
+import { MenuContainer } from "@components/Menu";
+import { MenuItem } from "@components/Menu/MenuItem";
+import { Box, Button, Center, Loader, Stack } from "@mantine/core";
 import React from "react";
-import { assertNotReachable, ClientStatus, Players } from "tic-tac-shared";
+import { BiSearchAlt } from "react-icons/bi";
+import { BsPeople } from "react-icons/bs";
+import { assertNotReachable, ClientStatus } from "tic-tac-shared";
 import { GameView } from "./components/GameView";
 import { useOnlineGame } from "./hooks/useOnlineGame";
 
@@ -36,7 +40,7 @@ export const OnlineGame: React.FC = () => {
                     game={state.game}
                     makeMove={makeMove}
                     allyPlayerKey={state.playerKey}
-                    enemyPlayerKey={Players.getOtherPlayerKey(state.playerKey)}
+                    enemyPlayerKey={state.enemyPlayerKey}
                 />
             );
         }
