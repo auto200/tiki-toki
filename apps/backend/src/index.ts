@@ -18,7 +18,7 @@ const server = app.listen(port, () => {
 const io = new SocketIOServer(server, {
     //todo: restrict origin
     //dunno why it's breaking all the time
-    cors: { origin: ["http://localhost:3000"] },
+    cors: { origin: "*" },
 });
 
 const playersRegistryService = new PlayersRegistryService();

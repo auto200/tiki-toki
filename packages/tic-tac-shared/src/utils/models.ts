@@ -14,6 +14,7 @@ export type PlayerState =
     | {
           status: ClientStatus.IN_GAME;
           playerKey: PlayerKey;
+          enemyPlayerKey: PlayerKey;
           game: Game;
       };
 

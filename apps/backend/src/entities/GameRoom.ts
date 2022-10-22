@@ -38,8 +38,18 @@ export default class GameRoom {
     }
 
     private emitGameStateToPlayers() {
-        this.player1.setState({ status: ClientStatus.IN_GAME, game: this.game, playerKey: "one" });
-        this.player2.setState({ status: ClientStatus.IN_GAME, game: this.game, playerKey: "two" });
+        this.player1.setState({
+            status: ClientStatus.IN_GAME,
+            game: this.game,
+            playerKey: "one",
+            enemyPlayerKey: "two",
+        });
+        this.player2.setState({
+            status: ClientStatus.IN_GAME,
+            game: this.game,
+            playerKey: "two",
+            enemyPlayerKey: "one",
+        });
     }
 
     private registerGameEvents() {
