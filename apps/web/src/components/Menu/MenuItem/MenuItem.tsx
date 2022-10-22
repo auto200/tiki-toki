@@ -30,6 +30,7 @@ export const MenuItem = ({ icon, text, disabled, ...rest }: MenuItemProps) => {
                           },
                       }),
             })}
+            {...rest}
             onClick={() => {
                 !disabled && rest.onClick && rest.onClick();
             }}

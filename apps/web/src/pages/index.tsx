@@ -4,24 +4,24 @@ import { Layout } from "@components/shared/Layout";
 import type { NextPage } from "next";
 import { GiBabyfootPlayers, GiVintageRobot, GiWireframeGlobe } from "react-icons/gi";
 
-const menuItems: (MenuItemProps & { href: string; dataCy: string })[] = [
+const menuItems: (MenuItemProps & { href: string; "data-cy": string })[] = [
     {
         href: "/local1v1",
         icon: <GiBabyfootPlayers />,
         text: "Local 1v1",
-        dataCy: "local1v1",
+        "data-cy": "local1v1",
     },
     {
         href: "/playerVsAi",
         icon: <GiVintageRobot />,
         text: "Play against AI",
-        dataCy: "playerVsAi",
+        "data-cy": "playerVsAi",
     },
     {
         href: "/online",
         icon: <GiWireframeGlobe />,
         text: "Play online",
-        dataCy: "onlineGame",
+        "data-cy": "onlineGame",
     },
 ];
 
