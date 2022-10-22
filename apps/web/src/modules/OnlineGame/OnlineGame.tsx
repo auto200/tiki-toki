@@ -10,15 +10,19 @@ export const OnlineGame: React.FC = () => {
     switch (state.status) {
         case ClientStatus.IDLE: {
             return (
-                <Box>
-                    <Button disabled>Create Lobby</Button>
-                    <Button onClick={joinQueue}>Find Game</Button>
-                </Box>
+                <MenuContainer>
+                    <MenuItem icon={<BiSearchAlt />} text="Find Game" onClick={joinQueue} />
+                    <MenuItem icon={<BsPeople />} text="Create Lobby" disabled />
+                </MenuContainer>
             );
         }
         case ClientStatus.IN_QUEUE: {
             return (
                 <Stack>
+                    <Center>
+                        <Loader variant="dots" />
+                    </Center>
+                    {/* TODO: add timer */}
                     <Center>in Queue</Center>
                     <Box>
                         <Button onClick={leaveQueue}>Leave Queue</Button>

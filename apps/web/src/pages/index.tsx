@@ -1,22 +1,38 @@
+import { MenuContainer } from "@components/Menu";
+import { MenuItemLink, MenuItemProps } from "@components/Menu/MenuItem";
 import { Layout } from "@components/shared/Layout";
-import { Button, Group } from "@mantine/core";
 import type { NextPage } from "next";
-import Link from "next/link";
+import { GiBabyfootPlayers, GiVintageRobot, GiWireframeGlobe } from "react-icons/gi";
+
+const menuItems: (MenuItemProps & { href: string; dataCy: string })[] = [
+    {
+        href: "/local1v1",
+        icon: <GiBabyfootPlayers />,
+        text: "Local 1v1",
+        dataCy: "local1v1",
+    },
+    {
+        href: "/playerVsAi",
+        icon: <GiVintageRobot />,
+        text: "Play against AI",
+        dataCy: "playerVsAi",
+    },
+    {
+        href: "/online",
+        icon: <GiWireframeGlobe />,
+        text: "Play online",
+        dataCy: "onlineGame",
+    },
+];
 
 const Home: NextPage = () => {
     return (
         <Layout>
-            <Group>
-                <Link href="/online">
-                    <Button>Play online</Button>
-                </Link>
-                <Link href="/local1v1">
-                    <Button data-cy="local1v1">Local 1v1</Button>
-                </Link>
-                <Link href="/playerVsAi">
-                    <Button>Play against AI</Button>
-                </Link>
-            </Group>
+            <MenuContainer>
+                {menuItems.map(menuItemProps => (
+                    <MenuItemLink key={menuItemProps.text} {...menuItemProps} />
+                ))}
+            </MenuContainer>
         </Layout>
     );
 };
