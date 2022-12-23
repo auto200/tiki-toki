@@ -1,5 +1,5 @@
 import { Box, Text } from "@mantine/core";
-import { NextLink } from "@mantine/next";
+import NextLink from "next/link";
 import React from "react";
 
 export type MenuItemProps = {
