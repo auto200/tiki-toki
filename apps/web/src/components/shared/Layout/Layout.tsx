@@ -1,5 +1,5 @@
-import { Box, Center } from "@mantine/core";
-import Link from "next/link";
+import { Anchor, Box, Center } from "@mantine/core";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineHome } from "react-icons/ai";
@@ -7,7 +7,6 @@ import { AiOutlineHome } from "react-icons/ai";
 type LayoutProps = {
     children: React.ReactNode;
 };
-//TODO: we probably shouldn't show this on mobile view
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
     const { pathname } = useRouter();
     const showHomeButton = pathname !== "/";
@@ -17,6 +16,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 minHeight: "100vh",
             }}
         >
+            {/* //TODO: we probably shouldn't show this on mobile view */}
             {showHomeButton && (
                 <Box
                     sx={{
@@ -32,11 +32,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                         },
                     }}
                 >
-                    <Link href="/">
-                        <span>
+                    <NextLink href="/" legacyBehavior passHref>
+                        <Anchor sx={{ fontSize: "inherit", color: "inherit" }}>
                             <AiOutlineHome />
-                        </span>
-                    </Link>
+                        </Anchor>
+                    </NextLink>
                 </Box>
             )}
             {children}
