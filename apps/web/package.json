@@ -10,9 +10,11 @@
     "test:e2e": "cypress open"
   },
   "dependencies": {
-    "@mantine/core": "^4.2.12",
-    "@mantine/hooks": "^4.2.12",
-    "@mantine/next": "^4.2.12",
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
+    "@mantine/core": "^5.9.5",
+    "@mantine/hooks": "^5.9.5",
+    "@mantine/next": "^5.9.5",
     "framer-motion": "^7.5.3",
     "next": "13.1.0",
     "react": "18.2.0",
