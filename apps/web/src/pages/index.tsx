@@ -1,7 +1,8 @@
 import { MenuContainer } from "@components/Menu";
-import { MenuItemLink, MenuItemProps } from "@components/Menu/MenuItem";
+import { MenuItem, MenuItemProps } from "@components/Menu/MenuItem";
 import { Layout } from "@components/shared/Layout";
 import type { NextPage } from "next";
+import NextLink from "next/link";
 import { GiBabyfootPlayers, GiVintageRobot, GiWireframeGlobe } from "react-icons/gi";
 
 const menuItems: (MenuItemProps & { href: string; "data-cy": string })[] = [
@@ -29,8 +30,15 @@ const Home: NextPage = () => {
     return (
         <Layout>
             <MenuContainer>
-                {menuItems.map(menuItemProps => (
-                    <MenuItemLink key={menuItemProps.text} {...menuItemProps} />
+                {menuItems.map(item => (
+                    <NextLink key={item.text} href={item.href} passHref legacyBehavior>
+                        <MenuItem
+                            component="a"
+                            icon={item.icon}
+                            text={item.text}
+                            data-cy={item["data-cy"]}
+                        />
+                    </NextLink>
                 ))}
             </MenuContainer>
         </Layout>
