@@ -1,4 +1,4 @@
-import { Container } from "@mantine/core";
+import { Container, createStyles } from "@mantine/core";
 import { Piece as GamePiece, PieceSize } from "tic-tac-shared";
 
 const PIECE_SIZE_TO_PX: Record<PieceSize, number> = {
@@ -8,6 +8,25 @@ const PIECE_SIZE_TO_PX: Record<PieceSize, number> = {
 };
 const BASE_BORDER_WIDTH = 2;
 
+const useStyles = createStyles(
+    ({ colors }, { pieceSize, color }: { pieceSize: PieceSize; color: PieceProps["color"] }) => ({
+        piece: {
+            border: `2px solid ${colors[color]![8]}`,
+            borderWidth: BASE_BORDER_WIDTH + pieceSize,
+            borderRadius: "50%",
+            padding: 0,
+            width: PIECE_SIZE_TO_PX[pieceSize],
+            height: PIECE_SIZE_TO_PX[pieceSize],
+        },
+        dimmed: {
+            opacity: 0.2,
+        },
+        animate: {
+            transition: "opacity 0.2s",
+        },
+    }),
+);
+
 export type PieceProps = {
     piece: GamePiece;
     color: "green" | "red";
@@ -16,18 +35,10 @@ export type PieceProps = {
 };
 
 export const Piece: React.FC<PieceProps> = ({ piece, color, dimmed, animate }) => {
+    const { classes, cx } = useStyles({ pieceSize: piece.size, color });
     return (
         <Container
-            sx={({ colors }) => ({
-                border: `2px solid ${colors[color]![8]}`,
-                borderWidth: BASE_BORDER_WIDTH + piece.size,
-                borderRadius: "50%",
-                padding: 0,
-                width: PIECE_SIZE_TO_PX[piece.size],
-                height: PIECE_SIZE_TO_PX[piece.size],
-                ...(dimmed && { opacity: 0.2 }),
-                ...(animate && { transition: "opacity 0.2s" }),
-            })}
+            className={cx(classes.piece, { [classes.dimmed]: dimmed, [classes.animate]: animate })}
         />
     );
 };

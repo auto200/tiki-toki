@@ -1,69 +1,55 @@
 import { Piece, PieceProps } from "@components/Piece";
-import { Container, SimpleGrid } from "@mantine/core";
-import { motion } from "framer-motion";
+import { createStyles, SimpleGrid } from "@mantine/core";
 import { Piece as GamePiece } from "tic-tac-shared";
+import { PieceWrapper } from "./PieceWrapper";
+
+const useStyles = createStyles(({ spacing, colors }) => ({
+    wrapper: {
+        margin: spacing.sm,
+        padding: spacing.sm,
+    },
+    turnActive: {
+        outline: `2px solid ${colors.gray[4]}`,
+    },
+}));
 
 type PiecesProps = {
     pieces: GamePiece[];
-    turnActive: boolean;
+    isTurnActive: boolean;
     piecesColor: PieceProps["color"];
     selectedPieceId: GamePiece["id"] | null;
     selectPiece: (id: string) => void;
     canMakeMove: boolean;
 };
 
-const MotionContainer = motion(Container);
-
 export const Pieces: React.FC<PiecesProps> = ({
     pieces,
-    turnActive,
+    isTurnActive,
     piecesColor,
     selectedPieceId,
     selectPiece,
     canMakeMove,
 }) => {
+    const { classes, cx } = useStyles();
+
     return (
         <SimpleGrid
             cols={3}
             breakpoints={[{ minWidth: 600, cols: 6 }]}
-            m="sm"
-            p="sm"
-            sx={({ colors }) => ({
-                ...(turnActive && {
-                    outline: `2px solid ${colors.gray![4]}`,
-                }),
-            })}
+            className={cx(classes.wrapper, { [classes.turnActive]: isTurnActive })}
         >
-            {pieces.map((piece, i) => {
-                const canUse = turnActive && canMakeMove && !piece.used;
-                return (
-                    <MotionContainer
-                        key={piece.id}
-                        data-cy={`piece-${piecesColor}-${i}`}
-                        onClick={() => canUse && selectPiece(piece.id)}
-                        sx={({ colors, spacing }) => ({
-                            display: "flex",
-                            alignItems: "center",
-                            height: "100%",
-                            padding: spacing.sm,
-                            aspectRatio: "1",
-                            outline:
-                                selectedPieceId === piece.id ? `3px solid ${colors.dark![5]}` : "",
-                            ...(canUse && {
-                                cursor: "pointer",
-                                "&:hover": {
-                                    backgroundColor: colors.dark![5],
-                                },
-                            }),
-                        })}
-                        initial={{ opacity: 0, scale: 0.3 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: i * 0.12 }}
-                    >
-                        <Piece piece={piece} color={piecesColor} dimmed={piece.used} animate />
-                    </MotionContainer>
-                );
-            })}
+            {pieces.map((piece, i) => (
+                <PieceWrapper
+                    key={piece.id}
+                    pieceIndex={i}
+                    pieceColor={piecesColor}
+                    canUse={isTurnActive && canMakeMove && !piece.used}
+                    isSelected={selectedPieceId === piece.id}
+                    onSelect={() => selectPiece(piece.id)}
+                >
+                    <Piece piece={piece} color={piecesColor} dimmed={piece.used} animate />
+                </PieceWrapper>
+            ))}
         </SimpleGrid>
     );
 };
