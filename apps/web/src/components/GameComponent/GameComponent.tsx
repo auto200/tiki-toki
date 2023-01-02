@@ -1,10 +1,19 @@
 import { Board } from "@components/Board";
 import { PieceProps } from "@components/Piece";
 import { Pieces } from "@components/Pieces";
-import { Stack } from "@mantine/core";
+import { createStyles, Stack } from "@mantine/core";
 import { EndGameComposition } from "common/models";
 import React from "react";
 import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared";
+
+const useStyles = createStyles({
+    wrapper: {
+        justifyContent: "center",
+        width: "100%",
+        maxWidth: 660,
+        gap: 0,
+    },
+});
 
 export type GameComponentProps = {
     game: Game;
@@ -35,6 +44,7 @@ export const GameComponent: React.FC<GameComponentProps> = ({
     isMyTurn,
     endGameComposition,
 }) => {
+    const { classes } = useStyles();
     const enemyPieces = game.players[enemyPlayerKey].pieces;
     const allyPieces = game.players[allyPlayerKey].pieces;
 
@@ -43,17 +53,10 @@ export const GameComponent: React.FC<GameComponentProps> = ({
 
     return (
         <>
-            <Stack
-                sx={{
-                    justifyContent: "center",
-                    width: "100%",
-                    maxWidth: 660,
-                    gap: 0,
-                }}
-            >
+            <Stack className={classes.wrapper}>
                 <Pieces
                     pieces={enemyPieces}
-                    turnActive={isGameActive && game.playerTurn === enemyPlayerKey}
+                    isTurnActive={isGameActive && game.playerTurn === enemyPlayerKey}
                     canMakeMove={isMyTurn}
                     piecesColor="red"
                     selectedPieceId={selectedPieceId}
@@ -70,7 +73,7 @@ export const GameComponent: React.FC<GameComponentProps> = ({
                 />
                 <Pieces
                     pieces={[...allyPieces].reverse()}
-                    turnActive={isGameActive && game.playerTurn === allyPlayerKey}
+                    isTurnActive={isGameActive && game.playerTurn === allyPlayerKey}
                     canMakeMove={isMyTurn}
                     piecesColor="green"
                     selectedPieceId={selectedPieceId}

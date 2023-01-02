@@ -38,7 +38,7 @@ const _MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ icon, text, ..
     const { classes } = useStyles();
 
     return (
-        <Button unstyled className={classes.wrapper} {...rest} ref={ref}>
+        <Button ref={ref} unstyled className={classes.wrapper} {...rest}>
             <Text className={classes.icon}>{icon}</Text>
             <Text weight="bold" size="xl">
                 {text}
