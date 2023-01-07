@@ -9,7 +9,9 @@ type LayoutProps = {
 };
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
     const { pathname } = useRouter();
+
     const showHomeButton = pathname !== "/";
+
     return (
         <Center
             sx={{

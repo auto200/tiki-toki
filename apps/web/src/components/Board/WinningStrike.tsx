@@ -17,7 +17,7 @@ const useStyles = createStyles(({ colors }) => ({
         marginLeft: 10,
         marginRight: 10,
         "& rect": {
-            fill: colors.indigo![7],
+            fill: colors.indigo[7],
         },
     },
     "row-1": {
