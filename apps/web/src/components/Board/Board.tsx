@@ -9,7 +9,7 @@ const useStyles = createStyles(({ colors }) => ({
     grid: {
         position: "relative",
         aspectRatio: "1",
-        backgroundColor: colors.gray![4],
+        backgroundColor: colors.gray[4],
     },
 }));
 

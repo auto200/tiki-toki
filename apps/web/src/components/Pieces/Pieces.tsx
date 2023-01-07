@@ -41,11 +41,11 @@ export const Pieces: React.FC<PiecesProps> = ({
             {pieces.map((piece, i) => (
                 <PieceWrapper
                     key={piece.id}
-                    pieceIndex={i}
-                    pieceColor={piecesColor}
-                    canUse={isTurnActive && canMakeMove && !piece.used}
+                    data-cy={`piece-${piecesColor}-${i}`}
+                    onClick={() => selectPiece(piece.id)}
+                    style={{ animationDelay: `${i * 0.12}s` }}
+                    disabled={!isTurnActive || !canMakeMove || piece.used}
                     isSelected={selectedPieceId === piece.id}
-                    onSelect={() => selectPiece(piece.id)}
                 >
                     <Piece piece={piece} color={piecesColor} dimmed={piece.used} animate />
                 </PieceWrapper>
