@@ -3,7 +3,7 @@ import { createStyles, SimpleGrid } from "@mantine/core";
 import { EndGameComposition } from "common/models";
 import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared";
 import { BoardCell } from "./BoardCell";
-import { WinningStrike } from "./WinningStrike";
+import { EndGameAnimation } from "./EndGameAnimation";
 
 const useStyles = createStyles(({ colors }) => ({
     grid: {
@@ -48,15 +48,7 @@ export const Board: React.FC<BoardProps> = ({
                     selectedPiece={selectedPiece}
                 />
             ))}
-            {endGameComposition &&
-                (endGameComposition === "DRAW" ? (
-                    <>
-                        <WinningStrike composition={"dia-1"} />
-                        <WinningStrike composition={"dia-2"} />
-                    </>
-                ) : (
-                    <WinningStrike composition={endGameComposition} />
-                ))}
+            {endGameComposition && <EndGameAnimation composition={endGameComposition} />}
         </SimpleGrid>
     );
 };

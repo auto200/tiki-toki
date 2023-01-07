@@ -1,9 +1,16 @@
 import { MantineProvider } from "@mantine/core";
+import { NextPageWithLayout } from "common/types";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
-export default function App(props: AppProps) {
+type AppPropsWithLayout = AppProps & {
+    Component: NextPageWithLayout;
+};
+
+export default function App(props: AppPropsWithLayout) {
     const { Component, pageProps } = props;
+
+    const getLayout = Component.getLayout ?? (page => page);
 
     return (
         <>
@@ -23,7 +30,7 @@ export default function App(props: AppProps) {
                     colorScheme: "dark",
                 }}
             >
-                <Component {...pageProps} />
+                {getLayout(<Component {...pageProps} />)}
             </MantineProvider>
         </>
     );

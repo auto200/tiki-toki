@@ -11,7 +11,7 @@ const BASE_BORDER_WIDTH = 2;
 const useStyles = createStyles(
     ({ colors }, { pieceSize, color }: { pieceSize: PieceSize; color: PieceProps["color"] }) => ({
         piece: {
-            border: `2px solid ${colors[color]![8]}`,
+            border: `2px solid ${colors[color][8]}`,
             borderWidth: BASE_BORDER_WIDTH + pieceSize,
             borderRadius: "50%",
             padding: 0,
