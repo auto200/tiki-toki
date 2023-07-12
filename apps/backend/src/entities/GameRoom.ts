@@ -49,11 +49,6 @@ export default class GameRoom {
         });
     }
 
-    // public playerDisconnected(player: GamePlayer) {
-    //     //TODO
-    //     this.emitToPlayers(SocketEvent.gameEnd, { message: `${player.id} left.` });
-    // }
-
     public toJSON() {
         return this.game;
     }

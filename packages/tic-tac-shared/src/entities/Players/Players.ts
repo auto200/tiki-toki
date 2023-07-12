@@ -14,14 +14,17 @@ export const Players = {
         two: playerTwo,
     }),
     getInitialPlayerTurn: (players: Players): PlayerKey =>
-        sample(Object.keys(players) as PlayerKey[])!,
+        sample(Object.keys(players) as PlayerKey[]) || "one",
     usePiece: (players: Players, playerKey: PlayerKey, piece: Piece): Players => ({
         ...players,
         [playerKey]: Player.usePiece(players[playerKey], piece),
     }),
-    playerIdToPlayerKey: (players: Players, playerId: Player["id"]): PlayerKey | null =>
-        (Object.entries(players).find(([_, player]) => playerId === player.id)?.[0] as
-            | PlayerKey
-            | undefined) || null,
+    playerIdToPlayerKey: (players: Players, playerId: Player["id"]): PlayerKey | null => {
+        const player = Object.entries(players).find(([_, player]) => playerId === player.id);
+        if (!player) return null;
+
+        const [playerKey] = player;
+        return playerKey as PlayerKey;
+    },
     getOtherPlayerKey: (key: PlayerKey): PlayerKey => (key === "one" ? "two" : "one"),
 };

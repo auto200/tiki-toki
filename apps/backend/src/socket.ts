@@ -36,9 +36,9 @@ export const initSocket = (
             }
 
             const gameRoom = gameRoomsService.createGame(...playersPair);
-            playersPair.forEach(p => {
-                io.in(p.id).socketsJoin(gameRoom.id);
-                io.to(p.id).emit(SocketEvent.clientState, p.state);
+            playersPair.forEach(player => {
+                io.in(player.id).socketsJoin(gameRoom.id);
+                io.to(player.id).emit(SocketEvent.clientState, player.state);
             });
         });
 
@@ -52,6 +52,7 @@ export const initSocket = (
             socket.emit(SocketEvent.clientState, player.state);
         });
 
+        // TODO: runtime payload validation
         socket.on(SocketEvent.makeMove, (payload: SocketEventPayloadMakeMove) => {
             if (player.state.status !== ClientStatus.IN_GAME) {
                 return socket.emit(SocketEvent.error, "Player is not in game");
@@ -63,7 +64,6 @@ export const initSocket = (
                 return socket.emit(SocketEvent.error, "Player is not in a game");
             }
 
-            // TODO: runtime typechecking
             try {
                 gameRoom.makeMove(payload);
                 io.to(gameRoom.player1.id).emit(SocketEvent.clientState, gameRoom.player1.state);
