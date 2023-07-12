@@ -6,6 +6,7 @@ export class PlayersRegistryService {
     public addPlayer(player: GamePlayer) {
         this.players.set(player.id, player);
     }
+
     public removePlayer(player: GamePlayer) {
         this.players.delete(player.id);
     }
