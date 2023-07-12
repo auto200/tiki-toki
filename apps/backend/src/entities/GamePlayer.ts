@@ -1,15 +1,7 @@
-import { Socket } from "socket.io";
-import { ClientStatus, PlayerState, SocketEvent } from "tic-tac-shared";
+import { ClientStatus, PlayerState } from "tic-tac-shared";
 
 export class GamePlayer {
-    public id: string;
-
-    constructor(
-        public socket: Socket,
-        private _state: PlayerState = { status: ClientStatus.IDLE },
-    ) {
-        this.id = socket.id;
-    }
+    constructor(public id: string, private _state: PlayerState = { status: ClientStatus.IDLE }) {}
 
     public get state() {
         return this._state;
@@ -17,6 +9,5 @@ export class GamePlayer {
 
     public setState(state: PlayerState): void {
         this._state = state;
-        this.socket.emit(SocketEvent.clientState, this._state);
     }
 }

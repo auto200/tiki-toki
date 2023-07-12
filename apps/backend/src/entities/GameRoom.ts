@@ -14,9 +14,8 @@ export default class GameRoom {
 
     constructor(
         public readonly id: string,
-        private player1: GamePlayer,
-        private player2: GamePlayer,
-        private io: Server,
+        public readonly player1: GamePlayer,
+        public readonly player2: GamePlayer,
     ) {
         this.game = Game.create(
             Players.create(Player.create(player1.id), Player.create(player2.id)),
@@ -24,26 +23,24 @@ export default class GameRoom {
             undefined,
             id,
         );
+        this.setPlayersState();
+
         console.log(JSON.stringify(this.game));
-
-        player1.socket.join(id);
-        player2.socket.join(id);
-
-        this.registerGameEvents();
-        this.emitGameStateToPlayers();
     }
 
-    private emitToPlayers(event: SocketEvent, data: unknown) {
-        this.io.to(this.id).emit(event, data);
+    public makeMove({ cellId, selectedPieceId }: SocketEventPayloadMakeMove) {
+        this.game = Game.makeMove(this.game, selectedPieceId, cellId);
+        this.setPlayersState();
     }
 
-    private emitGameStateToPlayers() {
+    private setPlayersState() {
         this.player1.setState({
             status: ClientStatus.IN_GAME,
             game: this.game,
             playerKey: "one",
             enemyPlayerKey: "two",
         });
+
         this.player2.setState({
             status: ClientStatus.IN_GAME,
             game: this.game,
@@ -52,26 +49,10 @@ export default class GameRoom {
         });
     }
 
-    private registerGameEvents() {
-        this.player1.socket.on(SocketEvent.makeMove, this.handleMakeMove.bind(this));
-        this.player2.socket.on(SocketEvent.makeMove, this.handleMakeMove.bind(this));
-    }
-
-    //TODO: runtime typechecking
-    private handleMakeMove({ selectedPieceId, cellId }: SocketEventPayloadMakeMove) {
-        //TODO: handle errors
-        try {
-            this.game = Game.makeMove(this.game, selectedPieceId, cellId);
-            this.emitGameStateToPlayers();
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    public playerDisconnected(player: GamePlayer) {
-        //TODO
-        this.emitToPlayers(SocketEvent.gameEnd, { message: `${player.id} left.` });
-    }
+    // public playerDisconnected(player: GamePlayer) {
+    //     //TODO
+    //     this.emitToPlayers(SocketEvent.gameEnd, { message: `${player.id} left.` });
+    // }
 
     public toJSON() {
         return this.game;
