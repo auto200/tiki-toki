@@ -1,21 +1,15 @@
 {
   "name": "tic-tac-shared",
   "version": "1.0.0",
-  "module": "dist/index.js",
-  "main": "dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.ts",
   "scripts": {
-    "test": "jest",
-    "dev": "rimraf dist && tsc --watch",
-    "build": "rimraf dist && tsc --project tsconfig.build.json"
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
     "@types/lodash": "^4.14.182",
     "jest": "^28.1.2",
-    "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
-    "ts-node": "^10.8.2",
     "tsconfig": "*",
     "typescript": "^4.9.4"
   },

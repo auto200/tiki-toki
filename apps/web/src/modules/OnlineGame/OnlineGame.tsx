@@ -8,7 +8,7 @@ import { assertNotReachable, ClientStatus } from "tic-tac-shared";
 import { GameView } from "./components/GameView";
 import { useOnlineGame } from "./hooks/useOnlineGame";
 
-export const OnlineGame: React.FC = () => {
+export const OnlineGame = () => {
     const { state, joinQueue, leaveQueue, makeMove } = useOnlineGame();
 
     switch (state.status) {
@@ -46,6 +46,8 @@ export const OnlineGame: React.FC = () => {
         }
         default: {
             assertNotReachable(state);
+
+            return <></>;
         }
     }
 };

@@ -33,6 +33,22 @@ export const useOnlineGame = () => {
         [socket],
     );
 
+    const joinQueue = useCallback(() => {
+        socket.emit(SocketEvent.joinQueue);
+    }, [socket]);
+
+    const leaveQueue = useCallback(() => {
+        socket.emit(SocketEvent.leaveQueue);
+    }, [socket]);
+
+    const makeMove = useCallback(
+        (selectedPieceId: Piece["id"], cellId: Cell["id"]) => {
+            const payload: SocketEventPayloadMakeMove = { selectedPieceId, cellId };
+            socket.emit(SocketEvent.makeMove, payload);
+        },
+        [socket],
+    );
+
     useEffect(() => {
         socket.connect();
         globalListeners.register();
@@ -42,20 +58,6 @@ export const useOnlineGame = () => {
             socket.disconnect();
         };
     }, [socket, globalListeners]);
-
-    const joinQueue = useCallback(() => {
-        socket.emit(SocketEvent.joinQueue);
-    }, [socket]);
-    const leaveQueue = () => {
-        socket.emit(SocketEvent.leaveQueue);
-    };
-    const makeMove = useCallback(
-        (selectedPieceId: Piece["id"], cellId: Cell["id"]) => {
-            const payload: SocketEventPayloadMakeMove = { selectedPieceId, cellId };
-            socket.emit(SocketEvent.makeMove, payload);
-        },
-        [socket],
-    );
 
     return { state, joinQueue, leaveQueue, makeMove };
 };
