@@ -144,6 +144,7 @@ describe("Game", () => {
 
         expect(game).toEqual(expected);
     });
+
     it("should be able to play mock game", () => {
         const players: Players = {
             one: Player.create(PLAYER_ONE_ID, createPlayerPieces(PLAYER_ONE_ID)),

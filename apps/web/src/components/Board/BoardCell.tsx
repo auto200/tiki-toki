@@ -1,6 +1,12 @@
 import { Piece, PieceProps } from "@components/Piece";
-import { Button, ButtonProps, createStyles, keyframes } from "@mantine/core";
-import React, { useState } from "react";
+import {
+    Button,
+    ButtonProps,
+    createPolymorphicComponent,
+    createStyles,
+    keyframes,
+} from "@mantine/core";
+import React from "react";
 import { Cell, Piece as GamePiece } from "tic-tac-shared";
 
 const scaleIn = keyframes({
@@ -57,9 +63,10 @@ type BoardCellProps = {
     allPlayersPieces: GamePiece[];
     selectedPiece: GamePiece | null;
     getPieceColor: (piece: GamePiece) => PieceProps["color"];
+    isHovering: boolean;
 } & ButtonProps;
 
-export const BoardCell: React.FC<BoardCellProps> = ({
+const _BoardCell: React.FC<BoardCellProps> = ({
     cellIndex,
     cell,
     makeMove,
@@ -67,9 +74,9 @@ export const BoardCell: React.FC<BoardCellProps> = ({
     allPlayersPieces,
     selectedPiece,
     getPieceColor,
+    isHovering,
 }) => {
     const { classes } = useStyles();
-    const [isHovering, setIsHovering] = useState(false);
 
     const displayPiecePreview = isHovering && selectedPiece && canPlace;
     const dominantPiece = allPlayersPieces.find(({ id }) => id === cell.dominantPieceId);
@@ -80,8 +87,6 @@ export const BoardCell: React.FC<BoardCellProps> = ({
             onClick={() => makeMove(cell.id)}
             className={classes.wrapper}
             style={{ transformOrigin: getCellTransformOrigin(cellIndex) }}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
             disabled={!canPlace}
         >
             {displayPiecePreview && (
@@ -93,3 +98,5 @@ export const BoardCell: React.FC<BoardCellProps> = ({
         </Button>
     );
 };
+
+export const BoardCell = createPolymorphicComponent<"button", BoardCellProps>(_BoardCell);

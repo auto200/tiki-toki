@@ -1,6 +1,7 @@
 import { PieceProps } from "@components/Piece";
 import { createStyles, SimpleGrid } from "@mantine/core";
 import { EndGameComposition } from "common/models";
+import { useState } from "react";
 import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared";
 import { BoardCell } from "./BoardCell";
 import { EndGameAnimation } from "./EndGameAnimation";
@@ -33,6 +34,7 @@ export const Board: React.FC<BoardProps> = ({
     endGameComposition,
 }) => {
     const { classes } = useStyles();
+    const [hoveringCellId, setHoveringCellId] = useState<null | Cell["id"]>(null);
 
     return (
         <SimpleGrid cols={GRID_SIZE} spacing="sm" className={classes.grid}>
@@ -46,6 +48,9 @@ export const Board: React.FC<BoardProps> = ({
                     allPlayersPieces={allPlayersPieces}
                     getPieceColor={getPieceColor}
                     selectedPiece={selectedPiece}
+                    isHovering={hoveringCellId === cell.id}
+                    onMouseEnter={() => selectedPiece && setHoveringCellId(cell.id)}
+                    onMouseLeave={() => setHoveringCellId(null)}
                 />
             ))}
             {endGameComposition && <EndGameAnimation composition={endGameComposition} />}
