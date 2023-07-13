@@ -1,5 +1,5 @@
 import { GameComponent, GameComponentProps } from "@components/GameComponent";
-import { Center, Modal, Stack, Title } from "@mantine/core";
+import { Button, Center, Modal, Stack, Title } from "@mantine/core";
 import { useGame } from "hooks/useGame";
 import React from "react";
 import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared";
@@ -7,6 +7,7 @@ import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared";
 type GameViewProps = {
     game: Game;
     makeMove: (selectedPieceId: Piece["id"], cellId: Cell["id"]) => void;
+    leaveEndedGame: () => void;
     allyPlayerKey: PlayerKey;
     enemyPlayerKey: PlayerKey;
 };
@@ -14,6 +15,7 @@ type GameViewProps = {
 export const GameView: React.FC<GameViewProps> = ({
     game,
     makeMove,
+    leaveEndedGame,
     allyPlayerKey,
     enemyPlayerKey,
 }) => {
@@ -69,6 +71,9 @@ export const GameView: React.FC<GameViewProps> = ({
                             {gameState === "DRAW" && `Draw!`}
                         </Title>
                     </Stack>
+                </Center>
+                <Center mt="xl">
+                    <Button onClick={leaveEndedGame}>Leave</Button>
                 </Center>
             </Modal>
         </>
