@@ -1,5 +1,5 @@
 import { GAME_SERVER_URL } from "common/constants";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import {
     Cell,
@@ -35,23 +35,22 @@ export const useOnlineGame = () => {
         [socket],
     );
 
-    const joinQueue = useCallback(() => {
+    const joinQueue = () => {
         socket.emit(SocketEvent.joinQueue);
-    }, [socket]);
+    };
 
-    const leaveQueue = useCallback(() => {
+    const leaveQueue = () => {
         socket.emit(SocketEvent.leaveQueue);
-    }, [socket]);
+    };
 
-    const makeMove = useCallback(
-        (selectedPieceId: Piece["id"], cellId: Cell["id"]) => {
-            const payload: SocketEventPayloadMakeMove = { selectedPieceId, cellId };
-            socket.emit(SocketEvent.makeMove, payload);
-        },
-        [socket],
-    );
+    const makeMove = (selectedPieceId: Piece["id"], cellId: Cell["id"]) => {
+        const payload: SocketEventPayloadMakeMove = { selectedPieceId, cellId };
+        socket.emit(SocketEvent.makeMove, payload);
+    };
 
-    const leaveEndedGame = useCallback(() => socket.emit(SocketEvent.leaveEndedGame), [socket]);
+    const leaveEndedGame = () => socket.emit(SocketEvent.leaveEndedGame);
+
+    const rematchProposition = () => socket.emit(SocketEvent.rematchProposition);
 
     useEffect(() => {
         socket.connect();
@@ -63,5 +62,5 @@ export const useOnlineGame = () => {
         };
     }, [socket, globalListeners]);
 
-    return { state, joinQueue, leaveQueue, makeMove, leaveEndedGame };
+    return { state, joinQueue, leaveQueue, makeMove, leaveEndedGame, rematchProposition };
 };

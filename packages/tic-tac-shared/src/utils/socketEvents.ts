@@ -9,4 +9,5 @@ export enum SocketEvent {
     clientState = "client-state",
     makeMove = "make-move",
     leaveEndedGame = "leave-ended-game",
+    rematchProposition = "rematch-proposition",
 }
