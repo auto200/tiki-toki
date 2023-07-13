@@ -10,26 +10,26 @@
     "test:e2e": "cypress open"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/server": "^11.10.0",
-    "@mantine/core": "^5.9.5",
-    "@mantine/hooks": "^5.9.5",
-    "@mantine/next": "^5.9.5",
+    "@emotion/react": "^11.11.1",
+    "@emotion/server": "^11.11.0",
+    "@mantine/core": "^5.10.5",
+    "@mantine/hooks": "^5.10.5",
+    "@mantine/next": "^5.10.5",
     "next": "13.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "^4.6.0",
-    "socket.io-client": "^4.5.4",
-    "tic-tac-shared": "*"
+    "react-icons": "^4.10.1",
+    "socket.io-client": "^4.7.1",
+    "tic-tac-shared": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "18.0.6",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
-    "cypress": "^10.4.0",
+    "cypress": "^10.11.0",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",
-    "tsconfig": "*",
-    "typescript": "^4.9.4"
+    "tsconfig": "^7.0.0",
+    "typescript": "^4.9.5"
   }
 }

@@ -14,19 +14,27 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
-                  cache: yarn
-            - run: yarn
-            - run: yarn build
-            - run: yarn test
+                  cache: pnpm
+
+            - uses: pnpm/action-setup@v2
+              with:
+                version: 8.6.7
+
+            - run: pnpm i
+            - run: pnpm build
+            - run: pnpm test
     test-e2e:
         name: test e2e
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - run: yarn
-            - run: yarn build
+            - uses: pnpm/action-setup@v2
+              with:
+                version: 8.6.7
+            - run: pnpm i
+            - run: pnpm build
             - uses: cypress-io/github-action@v4
               with:
                   install: false
                   working-directory: apps/web
-                  start: yarn start
+                  start: pnpm start
