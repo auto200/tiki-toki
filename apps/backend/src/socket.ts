@@ -82,16 +82,52 @@ export const initSocket = (
                 return socket.emit(SocketEvent.error, "Game has not ended yet");
             }
 
-            const game = gameRoomsService.getRoomById(player.state.game.id);
-            if (!game) return;
+            const gameRoom = gameRoomsService.getRoomById(player.state.game.id);
+            if (!gameRoom) return;
 
-            const playersToNotify = gameRoomsService.playerLeft(player);
-            if (!playersToNotify) return;
+            gameRoomsService.playerLeft(gameRoom);
 
-            io.socketsLeave(game.id);
-            playersToNotify.forEach(player => {
-                io.in(player.id).emit(SocketEvent.clientState, player.state);
-            });
+            io.socketsLeave(gameRoom.id);
+            io.in(gameRoom.player1.id).emit(SocketEvent.clientState, gameRoom.player1.state);
+            io.in(gameRoom.player2.id).emit(SocketEvent.clientState, gameRoom.player2.state);
+        });
+
+        socket.on(SocketEvent.rematchProposition, () => {
+            if (player.state.status !== ClientStatus.IN_GAME) {
+                return socket.emit(SocketEvent.error, "Player is not in game");
+            }
+
+            if (player.state.game.state.state === "PLAYING") {
+                return socket.emit(SocketEvent.error, "Game is still in progress");
+            }
+
+            const gameRoom = gameRoomsService.getRoomById(player.state.game.id);
+            if (!gameRoom) return;
+
+            if (gameRoom.isPlayerReadyToRematch(player)) {
+                return socket.emit(
+                    SocketEvent.error,
+                    "Player already declared itself ready to rematch",
+                );
+            }
+
+            gameRoom.proposeRematch(player);
+
+            if (!gameRoom.areAllPlayersReadyToRematch) {
+                io.in(gameRoom.player1.id).emit(SocketEvent.clientState, gameRoom.player1.state);
+                io.in(gameRoom.player2.id).emit(SocketEvent.clientState, gameRoom.player2.state);
+                return;
+            }
+            const oldGameRoom = gameRoom;
+            const newGameRoom = gameRoomsService.rematch(oldGameRoom);
+
+            io.socketsLeave(oldGameRoom.id);
+            io.in(player.id).socketsJoin(gameRoom.id);
+
+            io.in(newGameRoom.player1.id).socketsJoin(gameRoom.id);
+            io.in(newGameRoom.player2.id).socketsJoin(gameRoom.id);
+            io.in(newGameRoom.player1.id).emit(SocketEvent.clientState, newGameRoom.player1.state);
+            io.in(newGameRoom.player2.id).emit(SocketEvent.clientState, newGameRoom.player2.state);
         });
 
         //todo: figure out how to handle reconnecting players
@@ -107,7 +143,21 @@ export const initSocket = (
                     break;
                 }
                 case ClientStatus.IN_GAME: {
-                    gameRoomsService.playerLeft(player);
+                    const gameRoom = gameRoomsService.getRoomById(player.state.game.id);
+                    if (!gameRoom) return;
+
+                    gameRoomsService.playerLeft(gameRoom);
+
+                    io.socketsLeave(gameRoom.id);
+                    io.in(gameRoom.player1.id).emit(
+                        SocketEvent.clientState,
+                        gameRoom.player1.state,
+                    );
+                    io.in(gameRoom.player2.id).emit(
+                        SocketEvent.clientState,
+                        gameRoom.player2.state,
+                    );
+
                     break;
                 }
                 default: {

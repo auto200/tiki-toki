@@ -3,19 +3,22 @@ import { Button, Center, Modal, Stack, Title } from "@mantine/core";
 import { useGame } from "hooks/useGame";
 import React from "react";
 import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared";
+import { RematchButton, RematchButtonProps } from "./RematchButton";
 
 type GameViewProps = {
     game: Game;
-    makeMove: (selectedPieceId: Piece["id"], cellId: Cell["id"]) => void;
-    leaveEndedGame: () => void;
+    onMakeMove: (selectedPieceId: Piece["id"], cellId: Cell["id"]) => void;
+    onLeaveEndedGame: () => void;
+    onRematchProposition: () => void;
     allyPlayerKey: PlayerKey;
     enemyPlayerKey: PlayerKey;
 };
 
 export const GameView: React.FC<GameViewProps> = ({
     game,
-    makeMove,
-    leaveEndedGame,
+    onMakeMove,
+    onLeaveEndedGame,
+    onRematchProposition,
     allyPlayerKey,
     enemyPlayerKey,
 }) => {
@@ -32,11 +35,21 @@ export const GameView: React.FC<GameViewProps> = ({
 
     const handleMakeMove = (cellId: Cell["id"]) => {
         if (!selectedPieceId) return;
-        makeMove(selectedPieceId, cellId);
+        onMakeMove(selectedPieceId, cellId);
         setSelectedPieceId(null);
     };
 
     const gameState = game.state.state;
+
+    const getRematchStatus = (): RematchButtonProps["status"] => {
+        if (game.playersReadyToRematch.length === 0) return "none";
+
+        if (game.playersReadyToRematch.includes(game.players[allyPlayerKey].id)) {
+            return "waitingForOtherPlayer";
+        }
+
+        return "otherPlayerWantsRematch";
+    };
 
     const gameComponentProps: GameComponentProps = {
         game,
@@ -72,8 +85,11 @@ export const GameView: React.FC<GameViewProps> = ({
                         </Title>
                     </Stack>
                 </Center>
-                <Center mt="xl">
-                    <Button onClick={leaveEndedGame}>Leave</Button>
+                <Center mt="xl" sx={{ gap: "20px" }}>
+                    <RematchButton onClick={onRematchProposition} status={getRematchStatus()}>
+                        Rematch
+                    </RematchButton>
+                    <Button onClick={onLeaveEndedGame}>Leave</Button>
                 </Center>
             </Modal>
         </>

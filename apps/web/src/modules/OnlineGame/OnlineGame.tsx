@@ -9,7 +9,8 @@ import { GameView } from "./components/GameView";
 import { useOnlineGame } from "./hooks/useOnlineGame";
 
 export const OnlineGame = () => {
-    const { state, joinQueue, leaveQueue, makeMove, leaveEndedGame } = useOnlineGame();
+    const { state, joinQueue, leaveQueue, makeMove, leaveEndedGame, rematchProposition } =
+        useOnlineGame();
 
     switch (state.status) {
         case ClientStatus.IDLE: {
@@ -38,10 +39,11 @@ export const OnlineGame = () => {
             return (
                 <GameView
                     game={state.game}
-                    makeMove={makeMove}
+                    onMakeMove={makeMove}
                     allyPlayerKey={state.playerKey}
                     enemyPlayerKey={state.enemyPlayerKey}
-                    leaveEndedGame={leaveEndedGame}
+                    onLeaveEndedGame={leaveEndedGame}
+                    onRematchProposition={rematchProposition}
                 />
             );
         }

@@ -33,6 +33,23 @@ export default class GameRoom {
         this.setPlayersState();
     }
 
+    public isPlayerReadyToRematch(player: GamePlayer): boolean {
+        return this.game.playersReadyToRematch.includes(player.id);
+    }
+
+    public proposeRematch(player: GamePlayer) {
+        this.game = Game.setPlayerReadyToRematch(this.game, player.id);
+
+        this.setPlayersState();
+    }
+
+    public get areAllPlayersReadyToRematch() {
+        return (
+            this.game.playersReadyToRematch.includes(this.player1.id) &&
+            this.game.playersReadyToRematch.includes(this.player2.id)
+        );
+    }
+
     private setPlayersState() {
         this.player1.setState({
             status: ClientStatus.IN_GAME,
