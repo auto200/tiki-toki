@@ -73,6 +73,27 @@ export const initSocket = (
             }
         });
 
+        socket.on(SocketEvent.leaveEndedGame, () => {
+            if (player.state.status !== ClientStatus.IN_GAME) {
+                return socket.emit(SocketEvent.error, "Player is not in game");
+            }
+
+            if (player.state.game.state.state !== "ENDED") {
+                return socket.emit(SocketEvent.error, "Game has not ended yet");
+            }
+
+            const game = gameRoomsService.getRoomById(player.state.game.id);
+            if (!game) return;
+
+            const playersToNotify = gameRoomsService.playerLeft(player);
+            if (!playersToNotify) return;
+
+            io.socketsLeave(game.id);
+            playersToNotify.forEach(player => {
+                io.in(player.id).emit(SocketEvent.clientState, player.state);
+            });
+        });
+
         //todo: figure out how to handle reconnecting players
         socket.on(SocketEvent.disconnect, () => {
             console.log(player.state.status);

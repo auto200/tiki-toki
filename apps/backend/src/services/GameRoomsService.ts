@@ -13,11 +13,20 @@ export class GameRoomsService {
         return game;
     }
 
-    public playerLeft(player: GamePlayer) {
-        //TODO:notify players
+    public playerLeft(player: GamePlayer): [GamePlayer, GamePlayer] | undefined {
         if (player.state.status !== ClientStatus.IN_GAME) return;
 
-        this.gameRooms.delete(player.state.game.id);
+        const gameRoom = this.gameRooms.get(player.state.game.id);
+        if (!gameRoom) return;
+
+        gameRoom.player1.setState({ status: ClientStatus.IDLE });
+        gameRoom.player2.setState({ status: ClientStatus.IDLE });
+
+        const playersToNotify: [GamePlayer, GamePlayer] = [gameRoom.player1, gameRoom.player2];
+
+        this.gameRooms.delete(gameRoom.id);
+
+        return playersToNotify;
     }
 
     public getRoomById(gameId: Game["id"]) {

@@ -8,4 +8,5 @@ export enum SocketEvent {
     gameEnd = "game-end",
     clientState = "client-state",
     makeMove = "make-move",
+    leaveEndedGame = "leave-ended-game",
 }

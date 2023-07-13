@@ -51,6 +51,8 @@ export const useOnlineGame = () => {
         [socket],
     );
 
+    const leaveEndedGame = useCallback(() => socket.emit(SocketEvent.leaveEndedGame), [socket]);
+
     useEffect(() => {
         socket.connect();
         globalListeners.register();
@@ -61,5 +63,5 @@ export const useOnlineGame = () => {
         };
     }, [socket, globalListeners]);
 
-    return { state, joinQueue, leaveQueue, makeMove };
+    return { state, joinQueue, leaveQueue, makeMove, leaveEndedGame };
 };
