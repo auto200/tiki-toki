@@ -1,10 +1,14 @@
-import { Cell, Game, Piece, PlayerKey } from "../entities";
+import { Cell, Game, Piece, Player, PlayerKey } from "../entities";
 
 export enum ClientStatus {
     IDLE,
     IN_QUEUE,
     IN_GAME,
 }
+
+export type OnlineRoomState = {
+    playersReadyToRematch: Player["id"][];
+};
 
 export type PlayerState =
     | {
@@ -16,6 +20,7 @@ export type PlayerState =
           playerKey: PlayerKey;
           enemyPlayerKey: PlayerKey;
           game: Game;
+          roomState: OnlineRoomState;
       };
 
 export type SocketEventPayloadMakeMove = {

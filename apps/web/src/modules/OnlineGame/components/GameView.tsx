@@ -2,7 +2,7 @@ import { GameComponent, GameComponentProps } from "@components/GameComponent";
 import { Button, Center, Modal, Stack, Title } from "@mantine/core";
 import { useGame } from "hooks/useGame";
 import React from "react";
-import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared";
+import { Cell, Game, OnlineRoomState, Piece, PlayerKey } from "tic-tac-shared";
 import { RematchButton, RematchButtonProps } from "./RematchButton";
 
 type GameViewProps = {
@@ -12,6 +12,7 @@ type GameViewProps = {
     onRematchProposition: () => void;
     allyPlayerKey: PlayerKey;
     enemyPlayerKey: PlayerKey;
+    roomState: OnlineRoomState;
 };
 
 export const GameView: React.FC<GameViewProps> = ({
@@ -21,6 +22,7 @@ export const GameView: React.FC<GameViewProps> = ({
     onRematchProposition,
     allyPlayerKey,
     enemyPlayerKey,
+    roomState,
 }) => {
     const {
         allPlayersPieces,
@@ -42,9 +44,9 @@ export const GameView: React.FC<GameViewProps> = ({
     const gameState = game.state.state;
 
     const getRematchStatus = (): RematchButtonProps["status"] => {
-        if (game.playersReadyToRematch.length === 0) return "none";
+        if (roomState.playersReadyToRematch.length === 0) return "none";
 
-        if (game.playersReadyToRematch.includes(game.players[allyPlayerKey].id)) {
+        if (roomState.playersReadyToRematch.includes(game.players[allyPlayerKey].id)) {
             return "waitingForOtherPlayer";
         }
 

@@ -1,16 +1,9 @@
-import { Server } from "socket.io";
-import {
-    ClientStatus,
-    Game,
-    Player,
-    Players,
-    SocketEvent,
-    SocketEventPayloadMakeMove,
-} from "tic-tac-shared";
+import { ClientStatus, Game, Player, Players, SocketEventPayloadMakeMove } from "tic-tac-shared";
 import { GamePlayer } from "./GamePlayer";
 
-export default class GameRoom {
+export class GameRoom {
     public game: Game;
+    private playersReadyToRematch: Player["id"][] = [];
 
     constructor(
         public readonly id: string,
@@ -24,8 +17,6 @@ export default class GameRoom {
             id,
         );
         this.setPlayersState();
-
-        console.log(JSON.stringify(this.game));
     }
 
     public makeMove({ cellId, selectedPieceId }: SocketEventPayloadMakeMove) {
@@ -34,19 +25,17 @@ export default class GameRoom {
     }
 
     public isPlayerReadyToRematch(player: GamePlayer): boolean {
-        return this.game.playersReadyToRematch.includes(player.id);
+        return this.playersReadyToRematch.includes(player.id);
     }
 
     public proposeRematch(player: GamePlayer) {
-        this.game = Game.setPlayerReadyToRematch(this.game, player.id);
-
-        this.setPlayersState();
+        this.playersReadyToRematch.push(player.id);
     }
 
     public get areAllPlayersReadyToRematch() {
         return (
-            this.game.playersReadyToRematch.includes(this.player1.id) &&
-            this.game.playersReadyToRematch.includes(this.player2.id)
+            this.playersReadyToRematch.includes(this.player1.id) &&
+            this.playersReadyToRematch.includes(this.player2.id)
         );
     }
 
@@ -56,6 +45,9 @@ export default class GameRoom {
             game: this.game,
             playerKey: "one",
             enemyPlayerKey: "two",
+            roomState: {
+                playersReadyToRematch: this.playersReadyToRematch,
+            },
         });
 
         this.player2.setState({
@@ -63,10 +55,9 @@ export default class GameRoom {
             game: this.game,
             playerKey: "two",
             enemyPlayerKey: "one",
+            roomState: {
+                playersReadyToRematch: this.playersReadyToRematch,
+            },
         });
-    }
-
-    public toJSON() {
-        return this.game;
     }
 }

@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { ClientStatus, Game } from "tic-tac-shared";
 import { GamePlayer } from "../entities/GamePlayer";
-import GameRoom from "../entities/GameRoom";
+import { GameRoom } from "../entities/GameRoom";
 
 export class GameRoomsService {
     constructor(private gameRooms: Map<string, GameRoom> = new Map()) {}

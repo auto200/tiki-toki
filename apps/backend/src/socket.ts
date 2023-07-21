@@ -8,6 +8,7 @@ import {
 } from "tic-tac-shared";
 import { GamePlayer } from "./entities/GamePlayer";
 import { RootService } from "./config/rootService";
+import { GameRoom } from "./entities/GameRoom";
 
 export const initSocket = (
     server: Server,
@@ -36,10 +37,8 @@ export const initSocket = (
             }
 
             const gameRoom = gameRoomsService.createGame(...playersPair);
-            playersPair.forEach(player => {
-                io.in(player.id).socketsJoin(gameRoom.id);
-                io.to(player.id).emit(SocketEvent.clientState, player.state);
-            });
+
+            sendGameStateToPlayers(io, gameRoom);
         });
 
         socket.on(SocketEvent.leaveQueue, () => {
@@ -66,8 +65,7 @@ export const initSocket = (
 
             try {
                 gameRoom.makeMove(payload);
-                io.to(gameRoom.player1.id).emit(SocketEvent.clientState, gameRoom.player1.state);
-                io.to(gameRoom.player2.id).emit(SocketEvent.clientState, gameRoom.player2.state);
+                sendGameStateToPlayers(io, gameRoom);
             } catch (err) {
                 return socket.emit(SocketEvent.error, err);
             }
@@ -87,9 +85,7 @@ export const initSocket = (
 
             gameRoomsService.playerLeft(gameRoom);
 
-            io.socketsLeave(gameRoom.id);
-            io.in(gameRoom.player1.id).emit(SocketEvent.clientState, gameRoom.player1.state);
-            io.in(gameRoom.player2.id).emit(SocketEvent.clientState, gameRoom.player2.state);
+            sendGameStateToPlayers(io, gameRoom);
         });
 
         socket.on(SocketEvent.rematchProposition, () => {
@@ -114,25 +110,16 @@ export const initSocket = (
             gameRoom.proposeRematch(player);
 
             if (!gameRoom.areAllPlayersReadyToRematch) {
-                io.in(gameRoom.player1.id).emit(SocketEvent.clientState, gameRoom.player1.state);
-                io.in(gameRoom.player2.id).emit(SocketEvent.clientState, gameRoom.player2.state);
-                return;
+                return sendGameStateToPlayers(io, gameRoom);
             }
             const oldGameRoom = gameRoom;
             const newGameRoom = gameRoomsService.rematch(oldGameRoom);
 
-            io.socketsLeave(oldGameRoom.id);
-            io.in(player.id).socketsJoin(gameRoom.id);
-
-            io.in(newGameRoom.player1.id).socketsJoin(gameRoom.id);
-            io.in(newGameRoom.player2.id).socketsJoin(gameRoom.id);
-            io.in(newGameRoom.player1.id).emit(SocketEvent.clientState, newGameRoom.player1.state);
-            io.in(newGameRoom.player2.id).emit(SocketEvent.clientState, newGameRoom.player2.state);
+            sendGameStateToPlayers(io, newGameRoom);
         });
 
         //todo: figure out how to handle reconnecting players
         socket.on(SocketEvent.disconnect, () => {
-            console.log(player.state.status);
             switch (player.state.status) {
                 case ClientStatus.IDLE: {
                     break;
@@ -148,15 +135,7 @@ export const initSocket = (
 
                     gameRoomsService.playerLeft(gameRoom);
 
-                    io.socketsLeave(gameRoom.id);
-                    io.in(gameRoom.player1.id).emit(
-                        SocketEvent.clientState,
-                        gameRoom.player1.state,
-                    );
-                    io.in(gameRoom.player2.id).emit(
-                        SocketEvent.clientState,
-                        gameRoom.player2.state,
-                    );
+                    sendGameStateToPlayers(io, gameRoom);
 
                     break;
                 }
@@ -170,3 +149,8 @@ export const initSocket = (
         });
     });
 };
+
+function sendGameStateToPlayers(io: SocketIOServer, gameRoom: GameRoom) {
+    io.in(gameRoom.player1.id).emit(SocketEvent.clientState, gameRoom.player1.state);
+    io.in(gameRoom.player2.id).emit(SocketEvent.clientState, gameRoom.player2.state);
+}
