@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest",
     "dev": "ts-node-dev src/index.ts",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "dotenv": "^16.0.1",

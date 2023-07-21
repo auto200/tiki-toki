@@ -44,6 +44,7 @@ export const OnlineGame = () => {
                     enemyPlayerKey={state.enemyPlayerKey}
                     onLeaveEndedGame={leaveEndedGame}
                     onRematchProposition={rematchProposition}
+                    roomState={state.roomState}
                 />
             );
         }

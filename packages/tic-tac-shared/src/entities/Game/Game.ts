@@ -22,7 +22,6 @@ export type Game = {
     players: Players;
     playerTurn: PlayerKey;
     state: GameState;
-    playersReadyToRematch: Player["id"][];
 };
 
 export const Game = {
@@ -31,14 +30,12 @@ export const Game = {
         board: Board = Board.create(),
         initialPlayerTurn?: PlayerKey,
         id: string = nanoid(),
-        playersReadyToRematch: Player["id"][] = [],
     ): Game => ({
         id,
         state: { state: "PLAYING" },
         board,
         players,
         playerTurn: initialPlayerTurn || Players.getInitialPlayerTurn(players),
-        playersReadyToRematch,
     }),
     makeMove: (game: Game, pieceId: Piece["id"], targetCellId: Cell["id"]): Game | never => {
         const isGameInProgress = game.state.state === "PLAYING";
@@ -122,14 +119,6 @@ export const Game = {
         if (isDraw) return { ...game, state: { state: "DRAW" } };
 
         return { ...game, playerTurn: Game.getNextTurnPlayerKey(game) };
-    },
-    setPlayerReadyToRematch: (game: Game, playerId: Player["id"]): Game => {
-        if (game.playersReadyToRematch.includes(playerId)) return game;
-
-        return {
-            ...game,
-            playersReadyToRematch: [...game.playersReadyToRematch, playerId],
-        };
     },
     getNextTurnPlayerKey: (game: Game): PlayerKey => Players.getOtherPlayerKey(game.playerTurn),
     getCurrentTurnPlayer: (game: Game): Player => game.players[game.playerTurn],

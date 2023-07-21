@@ -140,7 +140,6 @@ describe("Game", () => {
                 },
             },
             playerTurn: INITIAL_PLAYER_TURN,
-            playersReadyToRematch: [],
         };
 
         expect(game).toEqual(expected);
