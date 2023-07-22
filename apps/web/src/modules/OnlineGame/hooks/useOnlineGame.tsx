@@ -26,10 +26,12 @@ export const useOnlineGame = () => {
             register: () => {
                 socket.on(SocketEvent.clientState, (state: PlayerState) => setState(state));
                 socket.on(SocketEvent.error, console.log);
+                socket.on(SocketEvent.payloadError, console.log);
             },
             unregister: () => {
                 socket.off(SocketEvent.clientState);
                 socket.off(SocketEvent.error);
+                socket.off(SocketEvent.payloadError);
             },
         }),
         [socket],

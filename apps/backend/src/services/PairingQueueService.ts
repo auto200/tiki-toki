@@ -1,5 +1,5 @@
 import { ClientStatus } from "tic-tac-shared";
-import { GamePlayer } from "../entities/GamePlayer";
+import { GamePlayer } from "@entities/GamePlayer";
 
 export class PairingQueueService {
     private static readonly MAX_QUE_LENGTH = 2;

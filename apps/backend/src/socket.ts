@@ -4,11 +4,12 @@ import {
     assertNotReachable,
     ClientStatus,
     SocketEvent,
-    SocketEventPayloadMakeMove,
+    socketEventPayloadMakeMoveSchema,
 } from "tic-tac-shared";
-import { GamePlayer } from "./entities/GamePlayer";
-import { RootService } from "./config/rootService";
-import { GameRoom } from "./entities/GameRoom";
+import { GamePlayer } from "@entities/GamePlayer";
+import { RootService } from "@config/rootService";
+import { GameRoom } from "@entities/GameRoom";
+import { validateSocketPayload } from "@common/validateSocketPayload";
 
 export const initSocket = (
     server: Server,
@@ -51,25 +52,31 @@ export const initSocket = (
             socket.emit(SocketEvent.clientState, player.state);
         });
 
-        // TODO: runtime payload validation
-        socket.on(SocketEvent.makeMove, (payload: SocketEventPayloadMakeMove) => {
-            if (player.state.status !== ClientStatus.IN_GAME) {
-                return socket.emit(SocketEvent.error, "Player is not in game");
-            }
+        socket.on(
+            SocketEvent.makeMove,
+            validateSocketPayload(
+                socketEventPayloadMakeMoveSchema,
+                payload => {
+                    if (player.state.status !== ClientStatus.IN_GAME) {
+                        return socket.emit(SocketEvent.error, "Player is not in game");
+                    }
 
-            const gameRoom = gameRoomsService.getRoomById(player.state.game.id);
+                    const gameRoom = gameRoomsService.getRoomById(player.state.game.id);
 
-            if (!gameRoom) {
-                return socket.emit(SocketEvent.error, "Player is not in a game");
-            }
+                    if (!gameRoom) {
+                        return socket.emit(SocketEvent.error, "Player is not in a game");
+                    }
 
-            try {
-                gameRoom.makeMove(payload);
-                sendGameStateToPlayers(io, gameRoom);
-            } catch (err) {
-                return socket.emit(SocketEvent.error, err);
-            }
-        });
+                    try {
+                        gameRoom.makeMove(payload);
+                        sendGameStateToPlayers(io, gameRoom);
+                    } catch (err) {
+                        return socket.emit(SocketEvent.error, err);
+                    }
+                },
+                err => socket.emit(SocketEvent.payloadError, err),
+            ),
+        );
 
         socket.on(SocketEvent.leaveEndedGame, () => {
             if (player.state.status !== ClientStatus.IN_GAME) {
@@ -80,12 +87,13 @@ export const initSocket = (
                 return socket.emit(SocketEvent.error, "Game has not ended yet");
             }
 
-            const gameRoom = gameRoomsService.getRoomById(player.state.game.id);
-            if (!gameRoom) return;
+            const gameRoomToClose = gameRoomsService.getRoomById(player.state.game.id);
+            if (!gameRoomToClose) return;
 
-            gameRoomsService.playerLeft(gameRoom);
+            // close gameRoom
+            gameRoomsService.playerLeft(gameRoomToClose);
 
-            sendGameStateToPlayers(io, gameRoom);
+            sendGameStateToPlayers(io, gameRoomToClose);
         });
 
         socket.on(SocketEvent.rematchProposition, () => {

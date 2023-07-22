@@ -22,8 +22,3 @@ export type PlayerState =
           game: Game;
           roomState: OnlineRoomState;
       };
-
-export type SocketEventPayloadMakeMove = {
-    selectedPieceId: Piece["id"];
-    cellId: Cell["id"];
-};
