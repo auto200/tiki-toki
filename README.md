@@ -36,7 +36,6 @@ To use internal package add it as a dev/dependency in app/package `package.json`
     -   smarter AI, possibly with adjustable difficulty
     -   fake AI players in online mode
 -   make sure game looks good on mobile devices
--   backend runtime payload validation
 -   we could not send whole game state on each player move
 -   backend tests
 -   dockerization of apps

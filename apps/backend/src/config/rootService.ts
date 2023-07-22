@@ -1,6 +1,6 @@
-import { GameRoomsService } from "../services/GameRoomsService";
-import { PairingQueueService } from "../services/PairingQueueService";
-import { PlayersRegistryService } from "../services/PlayersRegistryService";
+import { GameRoomsService } from "@services/GameRoomsService";
+import { PairingQueueService } from "@services/PairingQueueService";
+import { PlayersRegistryService } from "@services/PlayersRegistryService";
 
 export const createRootService = () => {
     const playersRegistryService = new PlayersRegistryService();

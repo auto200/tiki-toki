@@ -2,8 +2,22 @@
   "extends": "tsconfig/base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "baseUrl": "/src",
-    "target": "ES2022"
+    "baseUrl": "./src",
+    "target": "ES2022",
+    "paths": {
+      "@common/*": [
+        "common/*"
+      ],
+      "@config/*": [
+        "config/*"
+      ],
+      "@entities/*": [
+        "entities/*"
+      ],
+      "@services/*": [
+        "services/*"
+      ],
+    }
   },
   "include": [
     "src/**/*.ts"

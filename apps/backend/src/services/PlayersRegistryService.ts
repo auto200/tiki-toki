@@ -1,4 +1,4 @@
-import { GamePlayer } from "../entities/GamePlayer";
+import { GamePlayer } from "@entities/GamePlayer";
 
 export class PlayersRegistryService {
     constructor(private players: Map<string, GamePlayer> = new Map()) {}
