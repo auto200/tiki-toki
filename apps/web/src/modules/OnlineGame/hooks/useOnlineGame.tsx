@@ -19,7 +19,7 @@ export const useOnlineGame = () => {
     const [state, setState] = useState<PlayerState>({ status: ClientStatus.IDLE });
 
     const socket = useRef(
-        io(appConfig.GAME_SERVER_URL, {
+        io(appConfig.NEXT_PUBLIC_GAME_SERVER_URL, {
             autoConnect: false,
         }),
     ).current;
