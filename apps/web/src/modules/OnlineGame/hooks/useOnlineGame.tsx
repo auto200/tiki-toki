@@ -1,6 +1,7 @@
-import { GAME_SERVER_URL } from "common/constants";
 import { useEffect, useMemo, useRef, useState } from "react";
+
 import { io } from "socket.io-client";
+
 import {
     Cell,
     ClientStatus,
@@ -10,13 +11,15 @@ import {
     SocketEventPayloadMakeMove,
 } from "tic-tac-shared";
 
+import { appConfig } from "config/appConfig";
+
 type Listener = { register: () => void; unregister: () => void };
 
 export const useOnlineGame = () => {
     const [state, setState] = useState<PlayerState>({ status: ClientStatus.IDLE });
 
     const socket = useRef(
-        io(GAME_SERVER_URL, {
+        io(appConfig.NEXT_PUBLIC_GAME_SERVER_URL, {
             autoConnect: false,
         }),
     ).current;

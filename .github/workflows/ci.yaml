@@ -9,6 +9,10 @@ jobs:
     build-and-test:
         name: build and test
         runs-on: ubuntu-latest
+        environment: testing
+        env:
+            PORT: ${{vars.PORT}}
+            NEXT_PUBLIC_GAME_SERVER_URL: ${{vars.NEXT_PUBLIC_GAME_SERVER_URL}}
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
@@ -18,9 +22,13 @@ jobs:
             - run: yarn
             - run: yarn build
             - run: yarn test
+
     test-e2e:
         name: test e2e
         runs-on: ubuntu-latest
+        environment: testing
+        env:
+            NEXT_PUBLIC_GAME_SERVER_URL: ${{vars.NEXT_PUBLIC_GAME_SERVER_URL}}
         steps:
             - uses: actions/checkout@v3
             - run: yarn

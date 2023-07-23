@@ -1,27 +1,28 @@
-import { Server } from "http";
-import { Server as SocketIOServer, Socket } from "socket.io";
+import { Server } from "node:http";
+
+import { Server as SocketIOServer } from "socket.io";
 import {
     assertNotReachable,
     ClientStatus,
     SocketEvent,
     socketEventPayloadMakeMoveSchema,
 } from "tic-tac-shared";
+
 import { GamePlayer } from "@entities/GamePlayer";
 import { RootService } from "@config/rootService";
 import { GameRoom } from "@entities/GameRoom";
 import { validateSocketPayload } from "@common/validateSocketPayload";
+import { appConfig } from "@config/app.config";
 
 export const initSocket = (
     server: Server,
     { gameRoomsService, pairingQueueService, playersRegistryService }: RootService,
 ) => {
     const io = new SocketIOServer(server, {
-        //todo: restrict origin
-        //dunno why it's breaking all the time
-        cors: { origin: "*" },
+        cors: { origin: appConfig.CORS_ORIGIN ?? "*" },
     });
 
-    io.on(SocketEvent.connection, (socket: Socket) => {
+    io.on(SocketEvent.connection, socket => {
         console.log("player connected", socket.id);
         const player = new GamePlayer(socket.id);
         playersRegistryService.addPlayer(player);
@@ -37,7 +38,7 @@ export const initSocket = (
                 return socket.emit(SocketEvent.clientState, player.state);
             }
 
-            const gameRoom = gameRoomsService.createGame(...playersPair);
+            const gameRoom = gameRoomsService.create(...playersPair);
 
             sendGameStateToPlayers(io, gameRoom);
         });
@@ -90,8 +91,7 @@ export const initSocket = (
             const gameRoomToClose = gameRoomsService.getRoomById(player.state.game.id);
             if (!gameRoomToClose) return;
 
-            // close gameRoom
-            gameRoomsService.playerLeft(gameRoomToClose);
+            gameRoomsService.close(gameRoomToClose);
 
             sendGameStateToPlayers(io, gameRoomToClose);
         });
@@ -141,7 +141,7 @@ export const initSocket = (
                     const gameRoom = gameRoomsService.getRoomById(player.state.game.id);
                     if (!gameRoom) return;
 
-                    gameRoomsService.playerLeft(gameRoom);
+                    gameRoomsService.close(gameRoom);
 
                     sendGameStateToPlayers(io, gameRoom);
 

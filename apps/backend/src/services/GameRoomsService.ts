@@ -6,18 +6,18 @@ import { GameRoom } from "@entities/GameRoom";
 export class GameRoomsService {
     constructor(private gameRooms: Map<string, GameRoom> = new Map()) {}
 
-    private removeGame(gameRoom: GameRoom) {
+    private remove(gameRoom: GameRoom) {
         this.gameRooms.delete(gameRoom.id);
     }
 
-    public createGame(player1: GamePlayer, player2: GamePlayer): GameRoom {
-        const game = new GameRoom(nanoid(), player1, player2);
-        this.gameRooms.set(game.id, game);
+    public create(player1: GamePlayer, player2: GamePlayer): GameRoom {
+        const gameRoom = new GameRoom(nanoid(), player1, player2);
+        this.gameRooms.set(gameRoom.id, gameRoom);
 
-        return game;
+        return gameRoom;
     }
 
-    public playerLeft(gameRoom: GameRoom): void {
+    public close(gameRoom: GameRoom): void {
         gameRoom.player1.setState({ status: ClientStatus.IDLE });
         gameRoom.player2.setState({ status: ClientStatus.IDLE });
 
@@ -29,8 +29,8 @@ export class GameRoomsService {
     }
 
     public rematch(prevGameRoom: GameRoom) {
-        const newGame = this.createGame(prevGameRoom.player1, prevGameRoom.player2);
-        this.removeGame(prevGameRoom);
+        const newGame = this.create(prevGameRoom.player1, prevGameRoom.player2);
+        this.remove(prevGameRoom);
 
         return newGame;
     }
