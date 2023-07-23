@@ -5,6 +5,7 @@
   "scripts": {
     "test": "jest",
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
+    "start": "ts-node -r tsconfig-paths/register --transpile-only src/index.ts",
     "build": "rimraf dist && tsc",
     "typecheck": "tsc --noEmit"
   },
@@ -14,6 +15,7 @@
     "nanoid": "^3.3.4",
     "socket.io": "^4.5.4",
     "tic-tac-shared": "*",
+    "ts-node": "10.9.1",
     "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
