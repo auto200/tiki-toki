@@ -1,10 +1,16 @@
-# tic-tac-toe
+### [https://tiki-toki-web.vercel.app/](https://tiki-toki-web.vercel.app/)
+
+### Modified version of tic-tac-toe game inspired by this video
+
+
+https://github.com/auto200/tiki-toki/assets/49625375/f7909292-e7f4-4373-a640-559a31c78ae9
+
+
+---
 
 ## This repo is managed by [Turborepo](https://turborepo.org/)
 
 ### Getting started
-
----
 
 Clone the repo and install dependencies by running `yarn` command in the root of the project
 
