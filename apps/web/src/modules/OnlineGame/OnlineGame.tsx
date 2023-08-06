@@ -1,10 +1,15 @@
-import { MenuContainer } from "@components/Menu";
-import { MenuItem } from "@components/Menu/MenuItem";
-import { Box, Button, Center, Loader, Stack } from "@mantine/core";
 import React from "react";
+
+import { Box, Button, Center, Loader, Stack } from "@mantine/core";
 import { BiSearchAlt } from "react-icons/bi";
 import { BsPeople } from "react-icons/bs";
-import { assertNotReachable, ClientStatus } from "tic-tac-shared";
+
+import { ClientStatus } from "tic-tac-shared/online";
+import { assertNotReachable } from "tic-tac-shared/utils";
+
+import { MenuContainer } from "@components/Menu";
+import { MenuItem } from "@components/Menu/MenuItem";
+
 import { GameView } from "./components/GameView";
 import { useOnlineGame } from "./hooks/useOnlineGame";
 

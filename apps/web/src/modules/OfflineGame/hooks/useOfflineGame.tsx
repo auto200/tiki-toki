@@ -1,6 +1,6 @@
 import { useGame } from "hooks/useGame";
 import { useCallback, useEffect, useState } from "react";
-import { Cell, Game, Player, PlayerKey, Players } from "tic-tac-shared";
+import { Cell, Game, Player, PlayerKey, Players } from "tic-tac-shared/game-core";
 
 const PLAYER_ONE = "PLAYER_ONE";
 const PLAYER_TWO = "PLAYER_TWO";

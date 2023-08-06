@@ -2,14 +2,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { io } from "socket.io-client";
 
+import { Cell, Piece } from "tic-tac-shared/game-core";
 import {
-    Cell,
     ClientStatus,
-    Piece,
     PlayerState,
     SocketEvent,
     SocketEventPayloadMakeMove,
-} from "tic-tac-shared";
+} from "tic-tac-shared/online";
 
 import { appConfig } from "config/appConfig";
 

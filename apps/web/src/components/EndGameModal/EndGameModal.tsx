@@ -1,5 +1,5 @@
 import { Button, Center, Container, Modal, Stack, Title } from "@mantine/core";
-import { GameState, PlayerKey } from "tic-tac-shared";
+import { GameState, PlayerKey } from "tic-tac-shared/game-core";
 
 type EndGameModalProps = {
     show: boolean;

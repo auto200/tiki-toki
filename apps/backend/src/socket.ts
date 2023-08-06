@@ -1,12 +1,9 @@
 import { Server } from "node:http";
 
 import { Server as SocketIOServer } from "socket.io";
-import {
-    assertNotReachable,
-    ClientStatus,
-    SocketEvent,
-    socketEventPayloadMakeMoveSchema,
-} from "tic-tac-shared";
+
+import { SocketEvent, ClientStatus, socketEventPayloadMakeMoveSchema } from "tic-tac-shared/online";
+import { assertNotReachable } from "tic-tac-shared/utils";
 
 import { GamePlayer } from "@entities/GamePlayer";
 import { RootService } from "@config/rootService";

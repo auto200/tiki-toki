@@ -1,10 +1,13 @@
+import React from "react";
+
+import { createStyles, Stack } from "@mantine/core";
+
+import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared/game-core";
+
 import { Board } from "@components/Board";
 import { PieceProps } from "@components/Piece";
 import { Pieces } from "@components/Pieces";
-import { createStyles, Stack } from "@mantine/core";
 import { EndGameComposition } from "common/models";
-import React from "react";
-import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared";
 
 const useStyles = createStyles({
     wrapper: {

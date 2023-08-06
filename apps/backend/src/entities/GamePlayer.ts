@@ -1,4 +1,4 @@
-import { ClientStatus, PlayerState } from "tic-tac-shared";
+import { ClientStatus, PlayerState } from "tic-tac-shared/online";
 
 export class GamePlayer {
     constructor(

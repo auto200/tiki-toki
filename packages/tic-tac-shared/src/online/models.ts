@@ -1,4 +1,4 @@
-import { Cell, Game, Piece, Player, PlayerKey } from "../entities";
+import { Game, Player, PlayerKey } from "../game-core";
 
 export enum ClientStatus {
     IDLE,
