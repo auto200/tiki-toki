@@ -1,8 +1,12 @@
-import { GameComponent, GameComponentProps } from "@components/GameComponent";
-import { Button, Center, Modal, Stack, Title } from "@mantine/core";
-import { useGame } from "hooks/useGame";
 import React from "react";
-import { Cell, Game, OnlineRoomState, Piece, PlayerKey } from "tic-tac-shared";
+import { Button, Center, Modal, Stack, Title } from "@mantine/core";
+
+import { GameComponent, GameComponentProps } from "@components/GameComponent";
+
+import { useGame } from "hooks/useGame";
+import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared/game-core";
+import { OnlineRoomState } from "tic-tac-shared/online";
+
 import { RematchButton, RematchButtonProps } from "./RematchButton";
 
 type GameViewProps = {

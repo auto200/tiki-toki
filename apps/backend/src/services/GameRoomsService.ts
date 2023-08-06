@@ -1,5 +1,8 @@
 import { nanoid } from "nanoid";
-import { ClientStatus, Game } from "tic-tac-shared";
+
+import { Game } from "tic-tac-shared/game-core";
+import { ClientStatus } from "tic-tac-shared/online";
+
 import { GamePlayer } from "@entities/GamePlayer";
 import { GameRoom } from "@entities/GameRoom";
 

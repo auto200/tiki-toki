@@ -1,5 +1,5 @@
 import { Container, createStyles } from "@mantine/core";
-import { Piece as GamePiece, PieceSize } from "tic-tac-shared";
+import { Piece as GamePiece, PieceSize } from "tic-tac-shared/game-core";
 
 const PIECE_SIZE_TO_PX: Record<PieceSize, number> = {
     [PieceSize.small]: 30,

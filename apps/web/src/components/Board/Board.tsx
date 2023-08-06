@@ -2,7 +2,7 @@ import { PieceProps } from "@components/Piece";
 import { createStyles, SimpleGrid } from "@mantine/core";
 import { EndGameComposition } from "common/models";
 import { useState } from "react";
-import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared";
+import { Board as GameBoard, Cell, GRID_SIZE, Piece as GamePiece } from "tic-tac-shared/game-core";
 import { BoardCell } from "./BoardCell";
 import { EndGameAnimation } from "./EndGameAnimation";
 

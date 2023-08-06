@@ -1,5 +1,6 @@
-import { validateEnv } from "tic-tac-shared";
 import { z } from "zod";
+
+import { validateEnv } from "tic-tac-shared/utils";
 
 const appConfigSchema = z.object({
     NEXT_PUBLIC_GAME_SERVER_URL: z.string().url(),

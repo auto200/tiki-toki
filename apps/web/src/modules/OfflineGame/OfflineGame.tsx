@@ -1,7 +1,7 @@
 import { EndGameModal } from "@components/EndGameModal";
 import { GameComponent, GameComponentProps } from "@components/GameComponent";
 import { useRouter } from "next/router";
-import { PlayerKey } from "tic-tac-shared";
+import { PlayerKey } from "tic-tac-shared/game-core";
 import { OfflineGameMode, useOfflineGame } from "./hooks/useOfflineGame";
 
 export type OfflineGameProps = {

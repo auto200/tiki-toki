@@ -1,7 +1,7 @@
 import { Box, createStyles } from "@mantine/core";
 import { END_GAME_ANIMATION_DURATION_MS } from "common/constants";
 import React from "react";
-import { WinningComposition } from "tic-tac-shared";
+import { WinningComposition } from "tic-tac-shared/game-core";
 
 type WinningStrikeProps = {
     composition: WinningComposition;

@@ -7,7 +7,7 @@ import {
     keyframes,
 } from "@mantine/core";
 import React from "react";
-import { Cell, Piece as GamePiece } from "tic-tac-shared";
+import { Cell, Piece as GamePiece } from "tic-tac-shared/game-core";
 
 const scaleIn = keyframes({
     from: { transform: "scale(0.5)" },

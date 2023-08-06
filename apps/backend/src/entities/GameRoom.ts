@@ -1,4 +1,6 @@
-import { ClientStatus, Game, Player, Players, SocketEventPayloadMakeMove } from "tic-tac-shared";
+import { ClientStatus, SocketEventPayloadMakeMove } from "tic-tac-shared/online";
+import { Game, Player, Players } from "tic-tac-shared/game-core";
+
 import { GamePlayer } from "./GamePlayer";
 
 export class GameRoom {

@@ -1,6 +1,7 @@
 import sample from "lodash/sample";
 import { nanoid } from "nanoid";
-import { isNotNullable, WinningComposition, WINNING_CONDITIONS } from "../../utils";
+import { isNotNullable } from "../../../utils";
+import { WinningComposition, WINNING_CONDITIONS } from "../../constants";
 import { Board } from "../Board";
 import { Cell } from "../Cell";
 import { Piece } from "../Piece";

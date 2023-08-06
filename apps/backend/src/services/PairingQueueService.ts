@@ -1,4 +1,5 @@
-import { ClientStatus } from "tic-tac-shared";
+import { ClientStatus } from "tic-tac-shared/online";
+
 import { GamePlayer } from "@entities/GamePlayer";
 
 export class PairingQueueService {

@@ -1,6 +1,6 @@
 import { EndGameComposition } from "common/models";
 import { useMemo, useState } from "react";
-import { Board, Cell, Game, Piece, Player } from "tic-tac-shared";
+import { Board, Cell, Game, Piece, Player } from "tic-tac-shared/game-core";
 import { useEndGameModal } from "./useEndGameModal";
 
 export const useGame = (game: Game) => {

@@ -1,6 +1,6 @@
 import { Piece, PieceProps } from "@components/Piece";
 import { createStyles, SimpleGrid } from "@mantine/core";
-import { Piece as GamePiece } from "tic-tac-shared";
+import { Piece as GamePiece } from "tic-tac-shared/game-core";
 import { PieceWrapper } from "./PieceWrapper";
 
 const useStyles = createStyles(({ spacing, colors }) => ({

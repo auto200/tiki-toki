@@ -1,7 +1,24 @@
 {
   "name": "tic-tac-shared",
   "version": "1.0.0",
-  "main": "./src/index.ts",
+  "exports": {
+    "./game-core": "./src/game-core/index.ts",
+    "./online": "./src/online/index.ts",
+    "./utils": "./src/utils/index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "game-core": [
+        "./src/game-core/index.ts"
+      ],
+      "online": [
+        "./src/online/index.ts"
+      ],
+      "utils": [
+        "./src/utils/index.ts"
+      ]
+    }
+  },
   "scripts": {
     "test": "jest"
   },
