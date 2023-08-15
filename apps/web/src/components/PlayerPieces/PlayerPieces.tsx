@@ -1,7 +1,7 @@
 import { Piece, PieceProps } from "@components/Piece";
 import { createStyles, SimpleGrid } from "@mantine/core";
 import { Piece as GamePiece } from "tic-tac-shared/game-core";
-import { PieceWrapper } from "./PieceWrapper";
+import { PieceWrapper } from "./PlayerPieceWrapper";
 
 const useStyles = createStyles(({ spacing, colors }) => ({
     wrapper: {
@@ -22,7 +22,7 @@ type PiecesProps = {
     canMakeMove: boolean;
 };
 
-export const Pieces: React.FC<PiecesProps> = ({
+export const PlayerPieces: React.FC<PiecesProps> = ({
     pieces,
     isTurnActive,
     piecesColor,

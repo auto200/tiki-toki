@@ -14,6 +14,7 @@ export const useEndGameModal = (game: Game) => {
             }, END_GAME_ANIMATION_DURATION_MS + 200);
             return;
         }
+
         setIsEndGameModalOpen(false);
     }, [game]);
 

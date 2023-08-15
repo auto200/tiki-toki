@@ -6,7 +6,7 @@ import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared/game-core";
 
 import { Board } from "@components/Board";
 import { PieceProps } from "@components/Piece";
-import { Pieces } from "@components/Pieces";
+import { PlayerPieces } from "@components/PlayerPieces";
 import { EndGameComposition } from "common/models";
 
 const useStyles = createStyles({
@@ -57,7 +57,7 @@ export const GameComponent: React.FC<GameComponentProps> = ({
     return (
         <>
             <Stack className={classes.wrapper}>
-                <Pieces
+                <PlayerPieces
                     pieces={enemyPieces}
                     isTurnActive={isGameActive && game.playerTurn === enemyPlayerKey}
                     canMakeMove={isMyTurn}
@@ -74,7 +74,7 @@ export const GameComponent: React.FC<GameComponentProps> = ({
                     allPlayersPieces={allPlayersPieces}
                     endGameComposition={endGameComposition}
                 />
-                <Pieces
+                <PlayerPieces
                     pieces={[...allyPieces].reverse()}
                     isTurnActive={isGameActive && game.playerTurn === allyPlayerKey}
                     canMakeMove={isMyTurn}

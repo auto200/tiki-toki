@@ -1,5 +1,5 @@
 import { EndGameModal } from "@components/EndGameModal";
-import { GameComponent, GameComponentProps } from "@components/GameComponent";
+import { GameComponent } from "@components/GameComponent";
 import { useRouter } from "next/router";
 import { PlayerKey } from "tic-tac-shared/game-core";
 import { OfflineGameMode, useOfflineGame } from "./hooks/useOfflineGame";
@@ -25,24 +25,22 @@ export const OfflineGame: React.FC<OfflineGameProps> = ({ mode }) => {
         endGameComposition,
     } = useOfflineGame(mode, startingPlayer);
 
-    const gameComponentProps: GameComponentProps = {
-        game,
-        isGameActive,
-        allPlayersPieces,
-        cellIdsThatSelectedPieceCanBePlacedIn,
-        makeMove,
-        selectedPiece,
-        selectedPieceId,
-        setSelectedPieceId,
-        allyPlayerKey: "one",
-        enemyPlayerKey: "two",
-        isMyTurn: mode === "local1v1" ? true : game.playerTurn === "one",
-        endGameComposition,
-    };
-
     return (
         <>
-            <GameComponent {...gameComponentProps} />
+            <GameComponent
+                game={game}
+                isGameActive={isGameActive}
+                allPlayersPieces={allPlayersPieces}
+                cellIdsThatSelectedPieceCanBePlacedIn={cellIdsThatSelectedPieceCanBePlacedIn}
+                makeMove={makeMove}
+                selectedPiece={selectedPiece}
+                selectedPieceId={selectedPieceId}
+                setSelectedPieceId={setSelectedPieceId}
+                allyPlayerKey="one"
+                enemyPlayerKey="two"
+                isMyTurn={mode === "local1v1" ? true : game.playerTurn === "one"}
+                endGameComposition={endGameComposition}
+            />
             <EndGameModal
                 show={isEndGameModalOpen}
                 gameState={game.state.state}
