@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Center, Modal, Stack, Title } from "@mantine/core";
 
-import { GameComponent, GameComponentProps } from "@components/GameComponent";
+import { GameComponent } from "@components/GameComponent";
 
 import { useGame } from "hooks/useGame";
 import { Cell, Game, Piece, PlayerKey } from "tic-tac-shared/game-core";
@@ -57,24 +57,22 @@ export const GameView: React.FC<GameViewProps> = ({
         return "otherPlayerWantsRematch";
     };
 
-    const gameComponentProps: GameComponentProps = {
-        game,
-        isGameActive,
-        allPlayersPieces,
-        cellIdsThatSelectedPieceCanBePlacedIn,
-        makeMove: handleMakeMove,
-        selectedPiece,
-        selectedPieceId,
-        setSelectedPieceId,
-        allyPlayerKey,
-        enemyPlayerKey,
-        isMyTurn: game.playerTurn === allyPlayerKey,
-        endGameComposition,
-    };
-
     return (
         <>
-            <GameComponent {...gameComponentProps} />
+            <GameComponent
+                game={game}
+                isGameActive={isGameActive}
+                allPlayersPieces={allPlayersPieces}
+                cellIdsThatSelectedPieceCanBePlacedIn={cellIdsThatSelectedPieceCanBePlacedIn}
+                makeMove={handleMakeMove}
+                selectedPiece={selectedPiece}
+                selectedPieceId={selectedPieceId}
+                setSelectedPieceId={setSelectedPieceId}
+                allyPlayerKey={allyPlayerKey}
+                enemyPlayerKey={enemyPlayerKey}
+                isMyTurn={game.playerTurn === allyPlayerKey}
+                endGameComposition={endGameComposition}
+            />
             <Modal
                 opened={isEndGameModalOpen}
                 centered

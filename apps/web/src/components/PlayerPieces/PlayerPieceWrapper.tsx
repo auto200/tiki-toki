@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
     Button,
     ButtonProps,
@@ -5,7 +7,6 @@ import {
     createStyles,
     keyframes,
 } from "@mantine/core";
-import React from "react";
 
 const appear = keyframes({
     from: {

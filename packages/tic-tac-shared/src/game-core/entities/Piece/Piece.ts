@@ -10,7 +10,7 @@ export type Piece = {
     id: string;
     ownerId: string;
     size: PieceSize;
-    used: boolean;
+    isUsed: boolean;
 };
 
 export const Piece = {
@@ -18,11 +18,11 @@ export const Piece = {
         ownerId: string,
         size: PieceSize,
         id: string = nanoid(),
-        used: boolean = false,
+        isUsed: boolean = false,
     ): Piece => ({
         id,
         ownerId,
         size,
-        used,
+        isUsed,
     }),
 };

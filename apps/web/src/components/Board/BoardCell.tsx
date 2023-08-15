@@ -75,6 +75,7 @@ const _BoardCell: React.FC<BoardCellProps> = ({
     selectedPiece,
     getPieceColor,
     isHovering,
+    ...rest
 }) => {
     const { classes } = useStyles();
 
@@ -88,6 +89,7 @@ const _BoardCell: React.FC<BoardCellProps> = ({
             className={classes.wrapper}
             style={{ transformOrigin: getCellTransformOrigin(cellIndex) }}
             disabled={!canPlace}
+            {...rest}
         >
             {displayPiecePreview && (
                 <Piece piece={selectedPiece} color={getPieceColor(selectedPiece)} dimmed />
