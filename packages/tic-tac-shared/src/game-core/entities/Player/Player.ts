@@ -24,7 +24,7 @@ export const Player = {
     usePiece: (player: Player, piece: Piece): Player => ({
         ...player,
         pieces: player.pieces.map(playerPiece =>
-            playerPiece.id === piece.id ? { ...playerPiece, used: true } : playerPiece,
+            playerPiece.id === piece.id ? { ...playerPiece, isUsed: true } : playerPiece,
         ),
     }),
     getPieceById: (player: Player, pieceId: Piece["id"]): Piece | null =>
@@ -32,7 +32,7 @@ export const Player = {
     canMakeAnyMove: (player: Player, board: Board, allPlayersPieces: Piece[]): boolean =>
         player.pieces.some(
             piece =>
-                !piece.used &&
+                !piece.isUsed &&
                 board.cells.some(cell => Cell.canPlacePiece(cell, piece, allPlayersPieces)),
         ),
 };

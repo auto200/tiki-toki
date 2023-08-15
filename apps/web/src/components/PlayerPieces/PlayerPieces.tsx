@@ -44,10 +44,10 @@ export const PlayerPieces: React.FC<PiecesProps> = ({
                     data-cy={`piece-${piecesColor}-${i}`}
                     onClick={() => selectPiece(piece.id)}
                     style={{ animationDelay: `${i * 0.12}s` }}
-                    disabled={!isTurnActive || !canMakeMove || piece.used}
+                    disabled={!isTurnActive || !canMakeMove || piece.isUsed}
                     isSelected={selectedPieceId === piece.id}
                 >
-                    <Piece piece={piece} color={piecesColor} dimmed={piece.used} animate />
+                    <Piece piece={piece} color={piecesColor} dimmed={piece.isUsed} animate />
                 </PieceWrapper>
             ))}
         </SimpleGrid>

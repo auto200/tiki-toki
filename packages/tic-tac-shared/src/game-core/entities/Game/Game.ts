@@ -44,7 +44,7 @@ export const Game = {
 
         const player = Game.getCurrentTurnPlayer(game);
         const piece = Player.getPieceById(player, pieceId);
-        if (!piece || piece.used) throw new Error("Invalid piece id");
+        if (!piece || piece.isUsed) throw new Error("Invalid piece id");
 
         const targetCell = Board.getCellById(game.board, targetCellId);
         if (!targetCell) throw new Error("Invalid cell id");
@@ -60,7 +60,7 @@ export const Game = {
     },
     getRandomMove: (game: Game): { cellId: Cell["id"]; pieceId: Piece["id"] } | null => {
         const player = Game.getCurrentTurnPlayer(game);
-        const availablePieces = player.pieces.filter(piece => !piece.used);
+        const availablePieces = player.pieces.filter(piece => !piece.isUsed);
         const piecesWithRandomTargetCell = availablePieces
             .map(piece => {
                 const cells = game.board.cells.filter(cell =>
