@@ -1,7 +1,5 @@
 import { piwikProConfig } from "config/piwikProConfig";
-import dynamic from "next/dynamic";
-
-const PiwikProProvider = dynamic(import("@piwikpro/next-piwik-pro"), { ssr: false });
+import PiwikProProvider from "@piwikpro/next-piwik-pro";
 
 type AnalyticsProviderProps = { children: React.ReactNode };
 
