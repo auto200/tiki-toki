@@ -1,4 +1,4 @@
-### [https://tiki-toki-web.vercel.app/](https://tiki-toki-web.vercel.app/)
+### [https://tiki-toki.vercel.app/](https://tiki-toki-web.vercel.app/)
 
 ### Modified version of tic-tac-toe game inspired by this video
 
