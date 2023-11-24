@@ -1,5 +1,6 @@
 import { MantineProvider } from "@mantine/core";
 import { NextPageWithLayout } from "common/types";
+import { AnalyticsProvider } from "modules/analytics/AnalyticsProvider";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
@@ -22,16 +23,17 @@ export default function App(props: AppPropsWithLayout) {
                 />
             </Head>
 
-            <MantineProvider
-                withGlobalStyles
-                withNormalizeCSS
-                theme={{
-                    /** Put your mantine theme override here */
-                    colorScheme: "dark",
-                }}
-            >
-                {getLayout(<Component {...pageProps} />)}
-            </MantineProvider>
+            <AnalyticsProvider>
+                <MantineProvider
+                    withGlobalStyles
+                    withNormalizeCSS
+                    theme={{
+                        colorScheme: "dark",
+                    }}
+                >
+                    {getLayout(<Component {...pageProps} />)}
+                </MantineProvider>
+            </AnalyticsProvider>
         </>
     );
 }
